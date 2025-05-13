@@ -1,0 +1,126 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.main-header {
+  position: relative;
+  width: 100%;
+  height: 56px;
+  box-shadow: none;
+
+  ion-toolbar {
+    border-bottom: 1px solid var(--line-color);
+  }
+
+  ion-title {
+    font-size: 24px;
+    font-weight: 600;
+  }
+
+  ion-buttons[slot="end"] {
+    margin-right: 8px;
+
+    ion-button {
+      --padding-start: 4px;
+      --padding-end: 4px;
+    }
+
+    ion-badge {
+      position: absolute;
+      top: 0;
+      right: 0;
+      font-size: 10px;
+      padding: 2px 4px;
+    }
+
+    ion-avatar {
+      height: 32px;
+    }
+  }
+}
+
+ion-split-pane {
+  --side-width: 250px;
+  --side-max-width: 250px;
+  margin-top: 56px;
+}
+
+.sidebar-menu {
+  --width: 250px;
+  border-right: 1px solid var(--line-color);
+  
+  ion-content {
+    --background: var(--ion-background-color);
+  }
+
+  ion-list {
+    background: var(--ion-background-color);
+    padding: 8px 0;
+  }
+
+  ion-item {
+    --background: transparent;
+    --color: var(--ion-text-color);
+    --border-color: transparent;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --min-height: 48px;
+    margin: 4px 0;
+    cursor: pointer;
+
+    &.selected {
+      --background: rgba(var(--ion-color-primary-rgb), 0.1);
+      --color: var(--ion-color-primary);
+      
+      ion-icon {
+        color: var(--ion-color-primary);
+      }
+    }
+
+    &:hover {
+      --background: rgba(var(--ion-color-primary-rgb), 0.05);
+      --color: var(--ion-color-primary);
+      
+      ion-icon {
+        color: var(--ion-color-primary);
+      }
+    }
+  }
+
+  ion-icon {
+    color: var(--ion-text-color);
+    font-size: 20px;
+    margin-right: 12px;
+  }
+
+  ion-label {
+    font-size: 14px;
+    font-weight: 400;
+  }
+}
+
+
+
+@media (max-width: 768px) {
+  ion-split-pane {
+    margin-top: 0;
+  }
+
+  .main-header {
+    height: 56px;
+  }
+
+  ion-header ion-toolbar {
+    --padding-start: 8px;
+    --padding-end: 8px;
+  }
+
+  .sidebar-menu ion-list {
+    margin-top: 50px;
+  }
+
+  ion-toolbar {
+    padding-top: 50px;
+  }
+}

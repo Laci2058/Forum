@@ -1,0 +1,7 @@
+{
+  "name": "forumtest",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

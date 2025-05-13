@@ -4,12 +4,12 @@ import { AuthService } from '../../shared/services/auth.service';
 import { CommonModule, Location } from '@angular/common';
 
 @Component({
-  selector: 'app-register',
+  selector: 'app-signup',
   imports: [ReactiveFormsModule, CommonModule],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.scss'
+  templateUrl: './signup.component.html',
+  styleUrl: './signup.component.scss'
 })
-export class RegisterComponent {
+export class SignupComponent {
   signupForm!: FormGroup;
 
   constructor(
