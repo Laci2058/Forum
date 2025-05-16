@@ -23,39 +23,34 @@
       <ion-content>
         <ion-list lines="none">
           <ion-menu-toggle auto-hide="false">
-            <ion-item routerLink="/dashboard" routerLinkActive="selected" detail="false">
+            <ion-item routerLink="/home" routerLinkActive="selected" detail="false">
               <ion-icon slot="start" name="home-outline"></ion-icon>
-              <ion-label>{{ 'DASHBOARD'}}</ion-label>
+              <ion-label>HOME</ion-label>
+            </ion-item>
+
+            <ion-item routerLink="/my-posts" routerLinkActive="selected" detail="false"> <!--todo belépett user postjai-->
+              <ion-icon slot="start" name="folder-outline"></ion-icon>
+              <ion-label>MY POSTS</ion-label>
             </ion-item>
 
             <ion-item routerLink="/notifications" routerLinkActive="selected" detail="false">
               <ion-icon slot="start" name="notifications-outline"></ion-icon>
-              <ion-label>{{ 'NOTIFICATIONS'}}</ion-label>
-            </ion-item>
-
-            <ion-item routerLink="/projects" routerLinkActive="selected" detail="false">
-              <ion-icon slot="start" name="folder-outline"></ion-icon>
-              <ion-label>{{ 'PROJECTS'}}</ion-label>
-            </ion-item>
-
-            <ion-item routerLink="/models" routerLinkActive="selected" detail="false">
-              <ion-icon slot="start" name="cube-outline"></ion-icon>
-              <ion-label>{{ 'MODELS'}}</ion-label>
+              <ion-label>NOTIFICATIONS</ion-label>
             </ion-item>
 
             <ion-item routerLink="/profile" routerLinkActive="selected" detail="false">
               <ion-icon slot="start" name="person-outline"></ion-icon>
-              <ion-label>{{ 'PROFILE'}}</ion-label>
+              <ion-label>PROFILE</ion-label>
             </ion-item>
 
             <ion-item routerLink="/settings" routerLinkActive="selected" detail="false">
               <ion-icon slot="start" name="settings-outline"></ion-icon>
-              <ion-label>{{ 'SETTINGS'}}</ion-label>
+              <ion-label>SETTINGS</ion-label>
             </ion-item>
 
             <ion-item detail="false" button> <!--click-->
               <ion-icon slot="start" name="log-out-outline"></ion-icon>
-              <ion-label>{{ 'LOGOUT'}}</ion-label>
+              <ion-label>LOGOUT</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>

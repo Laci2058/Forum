@@ -21,27 +21,25 @@ export class LoginComponent {
 
   login() {
     this.isLoading = true;
-    setTimeout(() => {
-      if (this.email && this.password) {
-        this.errorMessage = '';
-        this.authService.login(this.email, this.password).subscribe({
-          next: (data) => {
-            if (data) {
-              // navigation
-              console.log(data);
-              this.isLoading = false;
-              this.router.navigateByUrl('/user-management');
-            }
-          }, error: (err) => {
-            console.log(err);
+    if (this.email && this.password) {
+      this.errorMessage = '';
+      this.authService.login(this.email, this.password).subscribe({
+        next: (data) => {
+          if (data) {
+            // navigation
+            console.log(data);
             this.isLoading = false;
-          },
-        })
-      } else {
-        this.isLoading = false;
-        this.errorMessage = 'Form is empty.';
-      }
-    }, 1500);
+            this.router.navigateByUrl('/home');
+          }
+        }, error: (err) => {
+          console.log(err);
+          this.isLoading = false;
+        },
+      })
+    } else {
+      this.isLoading = false;
+      this.errorMessage = 'Form is empty.';
+    }
   }
 
   navigate(to: string) {
