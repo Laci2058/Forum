@@ -2,10 +2,11 @@
   <ion-card>
     <ion-card-title>{{post.title}}</ion-card-title>
     <ion-card-subtitle>{{post.text}}</ion-card-subtitle>
+    {{post.creator_id}}
   </ion-card>
   <div  *ngFor="let comment of comments">
     <ion-card>
-      <ion-card-header>{{comment.creator_id}}</ion-card-header>
+      <a [routerLink]="['/profile',comment.creator_id]"> <ion-card-header>{{comment.creator_id}}</ion-card-header></a>
       {{comment.text}}
     </ion-card>
   </div>

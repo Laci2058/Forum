@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { mComment } from 'src/shared/models/Comment.model';
 import { mPost } from 'src/shared/models/Post.model';
@@ -12,7 +12,8 @@ import { PostService } from 'src/shared/services/post.service';
   styleUrls: ['./post-details.component.scss'],
   imports: [
     CommonModule,
-    IonicModule
+    IonicModule,
+    RouterLink
   ]
 })
 export class PostDetailsComponent implements OnInit {
