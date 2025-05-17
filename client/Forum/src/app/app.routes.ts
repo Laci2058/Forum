@@ -8,12 +8,12 @@ export const routes: Routes = [
   { path: 'login', loadComponent: () => import('./login/login.component').then((c) => c.LoginComponent) },
   { path: 'profile', loadComponent: () => import('./profile/profile.component').then((c) => c.ProfileComponent), canActivate: [authGuard] },
   {
-    path: 'topics/:id',
-    loadComponent: () => import('../shared/components/category-details/category-details.component').then((c) => c.CategoryDetailsComponent),
-  },
-  {
     path: 'topics/:id/:pid',
     loadComponent: () => import('../shared/components/post-details/post-details.component').then((c) => c.PostDetailsComponent),
+  },
+  {
+    path: 'topics/:id',
+    loadComponent: () => import('../shared/components/category-details/category-details.component').then((c) => c.CategoryDetailsComponent),
   },
   { path: '**', redirectTo: 'home' }
   //TODO: settings

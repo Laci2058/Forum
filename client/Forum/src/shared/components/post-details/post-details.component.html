@@ -1,5 +1,12 @@
-<div *ngFor="let comment of comments">
-  <p>
-    {{comment.text}}
-  </p>
+<div *ngIf="post">
+  <ion-card>
+    <ion-card-title>{{post.title}}</ion-card-title>
+    <ion-card-subtitle>{{post.text}}</ion-card-subtitle>
+  </ion-card>
+  <div  *ngFor="let comment of comments">
+    <ion-card>
+      <ion-card-header>{{comment.creator_id}}</ion-card-header>
+      {{comment.text}}
+    </ion-card>
+  </div>
 </div>

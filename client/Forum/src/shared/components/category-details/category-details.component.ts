@@ -11,7 +11,7 @@ import { PostService } from 'src/shared/services/post.service';
   selector: 'app-category-details',
   templateUrl: './category-details.component.html',
   styleUrls: ['./category-details.component.scss'],
-  imports:[
+  imports: [
     IonicModule,
     CommonModule,
     RouterLink
@@ -24,13 +24,15 @@ export class CategoryDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute, private postService: PostService) { }
 
   ngOnInit() {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.categoryId = id;
-      this.postService.getPostsByCategory(this.categoryId).subscribe(data => {
-        this.posts = data;
-      });
-    }
+    this.route.paramMap.subscribe(params => {
+      const id = params.get('id');
+      if (id) {
+        this.categoryId = id;
+        this.postService.getPostsByCategory(this.categoryId).subscribe(data => {
+          this.posts = data;
+        });
+      }
+    });
   }
 
 }

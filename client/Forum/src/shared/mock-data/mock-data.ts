@@ -94,6 +94,12 @@ export const MOCK_COMMENTS = [
     text: "kaga"
   },
   {
+    comment_id: "com7",
+    creator_id: "u2",
+    post_id: "p4",
+    text: "Converted from a Tosa-class battleship. Sunk at Midway on June 4, 1942"
+  },
+  {
     comment_id: "com5",
     creator_id: "u2",
     post_id: "p5",
