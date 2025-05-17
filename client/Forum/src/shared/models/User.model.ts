@@ -10,7 +10,6 @@ export interface mUser{
   user_id: string;
   email: string;
   name: string;
-  address: string;
   nickname: string;
   password: string;
 }
