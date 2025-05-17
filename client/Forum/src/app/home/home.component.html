@@ -1,6 +1,8 @@
-<div *ngFor="let category of categories">
-<p>
-  {{category.category_name}}
-</p>
+<div>
+  témák
+  <ion-card *ngFor="let category of categories" [routerLink]="['/home',category.category_id]">
+    <ion-card-title>
+          {{category.category_name}}
+    </ion-card-title>
+  </ion-card>
 </div>
-

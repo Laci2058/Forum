@@ -42,8 +42,4 @@ export class LoginComponent {
     }
   }
 
-  navigate(to: string) {
-    this.router.navigateByUrl(to);
-  }
-
 }

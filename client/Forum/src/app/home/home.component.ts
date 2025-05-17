@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { IonCard, IonicModule } from '@ionic/angular';
 import { mCategory } from 'src/shared/models/Category.model';
 import { CategoryService } from 'src/shared/services/category.service';
 
@@ -9,6 +11,8 @@ import { CategoryService } from 'src/shared/services/category.service';
   styleUrls: ['./home.component.scss'],
   imports: [
     CommonModule,
+    IonicModule,
+    RouterLink
   ]
 })
 export class HomeComponent  implements OnInit {
