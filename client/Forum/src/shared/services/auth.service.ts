@@ -1,12 +1,16 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/User.model';
+import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  private authState = new BehaviorSubject<boolean>(false);
+  isAuthenticated$ = this.authState.asObservable();
+  
   constructor(private http: HttpClient) { }
 
   login(email: string, password: string) {
@@ -18,7 +22,11 @@ export class AuthService {
       'Content-Type': 'application/x-www-form-urlencoded'
     });
 
-    return this.http.post('http://localhost:5000/app/login', body, {headers: headers, withCredentials: true});
+    
+    return this.http.post('http://localhost:5000/app/login', body, { headers: headers, withCredentials: true }).pipe(
+    tap(() => this.authState.next(true))
+  );
+     
   }
 
   register(user: User) {
@@ -37,10 +45,18 @@ export class AuthService {
   }
 
   logout() {
-    return this.http.post('http://localhost:5000/app/logout', {}, {withCredentials: true, responseType: 'text'});
+    return this.http.post('http://localhost:5000/app/logout', {}, {withCredentials: true, responseType: 'text'}).pipe(
+    tap(() => this.authState.next(false))
+  );
   }
 
-  checkAuth() {
-    return this.http.get<boolean>('http://localhost:5000/app/checkAuth', {withCredentials: true});
+  checkAuth(): Observable<boolean> {
+    return this.http.get<boolean>('http://localhost:5000/app/checkAuth', { withCredentials: true }).pipe(
+      tap(isAuth => this.authState.next(isAuth)),
+      catchError(() => {
+        this.authState.next(false);
+        return of(false);
+      })
+    );
   }
 }

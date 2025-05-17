@@ -14,7 +14,6 @@ const PORT = config.port;
 const mongoUri = config.mongoUri;
 
 
-app.use(cors());
 app.use(express.json());
 
 mongoose.connect(mongoUri)
@@ -26,11 +25,11 @@ mongoose.connect(mongoUri)
   })
   .catch(err => console.error('DB connection error:', err));
 
-const whitelist = ['*', 'http://localhost:4200']
+const whitelist = ['http://localhost:4200','http://localhost:8100']
 const corsOptions = {
-  origin: (origin: string | undefined, callback: (err: Error | null, allowed?: boolean) => void) => {
-    if (whitelist.indexOf(origin!) !== -1 || whitelist.includes('*')) {
-      callback(null, true);
+  origin: (origin: string | undefined, callback: (err: Error | null, allowedOrigin?: string) => void) => {
+    if (origin && whitelist.includes(origin)) {
+      callback(null, origin);
     } else {
       callback(new Error('Not allowed by CORS.'));
     }

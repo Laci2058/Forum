@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { addIcons } from 'ionicons';
 import {
   IonContent,
@@ -11,24 +11,27 @@ import {
   IonMenu,
   IonMenuToggle,
   IonRouterOutlet,
-  IonSplitPane, IonApp, IonAvatar, IonBadge, IonButtons, IonTitle, IonToolbar, IonHeader, 
-  IonMenuButton} from '@ionic/angular/standalone';
-import { 
-  homeOutline, 
-  notificationsOutline, 
-  folderOutline, 
-  cubeOutline, 
-  personOutline, 
+  IonSplitPane, IonApp, IonAvatar, IonBadge, IonButtons, IonTitle, IonToolbar, IonHeader,
+  IonMenuButton
+} from '@ionic/angular/standalone';
+import {
+  homeOutline,
+  notificationsOutline,
+  folderOutline,
+  cubeOutline,
+  personOutline,
   settingsOutline,
   logOutOutline,
   personCircleOutline
 } from 'ionicons/icons';
+import { AuthService } from 'src/shared/services/auth.service';
+import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [IonHeader, IonToolbar, IonTitle, IonButtons, IonAvatar, IonApp, 
+  imports: [IonHeader, IonToolbar, IonTitle, IonButtons, IonAvatar, IonApp,
     CommonModule,
     IonContent,
     IonIcon,
@@ -48,7 +51,7 @@ import {
 })
 export class AppComponent implements OnInit {
 
-  constructor() {
+  constructor(private authService: AuthService, private router: Router) {
     addIcons({
       'home-outline': homeOutline,
       'notifications-outline': notificationsOutline,
@@ -60,7 +63,24 @@ export class AppComponent implements OnInit {
       'person-circle-outline': personCircleOutline
     });
   }
+  isAuthenticated: boolean = false;
+  private authState = new BehaviorSubject<boolean>(false);
 
   ngOnInit() {
+  this.authService.checkAuth().subscribe();
+
+  this.authService.isAuthenticated$.subscribe(isAuth => {
+    this.isAuthenticated = isAuth;
+  });
+}
+  logout() {
+    this.authService.logout().subscribe({
+      next: (data) => {
+        console.log(data);
+        this.router.navigateByUrl('/login');
+      }, error: (err) => {
+        console.log(err);
+      }
+    })
   }
 }
