@@ -1,6 +1,5 @@
-<div>
-  Posták
-  <ion-card *ngFor="let post of posts">
+<div class="topics-container">
+  <ion-card *ngFor="let post of posts" [routerLink]="['/topics',categoryId,post.post_id]">
     <ion-card-title>
           {{post.title}}
     </ion-card-title>

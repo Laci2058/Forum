@@ -10,6 +10,18 @@ export const MOCK_CATEGORIES = [
   {
     category_id: "c3",
     category_name: "cat3",
+  },
+  {
+    category_id: "c4",
+    category_name: "cat4",
+  },
+  {
+    category_id: "c5",
+    category_name: "cat5",
+  },
+  {
+    category_id: "c6",
+    category_name: "cat6",
   }
 ]
 export const MOCK_POST = [

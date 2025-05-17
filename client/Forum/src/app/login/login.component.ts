@@ -26,10 +26,9 @@ export class LoginComponent {
       this.authService.login(this.email, this.password).subscribe({
         next: (data) => {
           if (data) {
-            // navigation
             console.log(data);
             this.isLoading = false;
-            this.router.navigateByUrl('/home');
+            this.router.navigateByUrl('/topics');
           }
         }, error: (err) => {
           console.log(err);
