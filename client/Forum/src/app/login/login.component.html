@@ -12,7 +12,6 @@
             <ion-label position="stacked">Email</ion-label>
             <ion-input fill="outline" placeholder="Email" class="ion-margin-top" formControlName="email"
               [color]="emailControl?.invalid && emailControl?.touched ? 'danger' : ''">
-              <ion-icon slot="start" name="mail"></ion-icon>
             </ion-input>
             @if (emailControl?.invalid && emailControl?.touched) {
             <ion-note color="danger">
@@ -25,7 +24,6 @@
             <ion-label position="stacked">Password</ion-label>
             <ion-input placeholder="Password" fill="outline" type="password" class="ion-margin-top"
               formControlName="password" [color]="passwordControl?.invalid && passwordControl?.touched ? 'danger' : ''">
-              <ion-icon slot="start" name="lock-closed"></ion-icon>
             </ion-input>
             @if (passwordControl?.invalid && passwordControl?.touched) {
             <ion-note color="danger">
@@ -44,7 +42,7 @@
             @if (isLoading) {
             <ion-spinner name="crescent" class="ion-text-center"></ion-spinner>
             } @else {
-            <span>SIGN_IN</span>
+            <span>Sign in</span>
             }
           </ion-button>
 

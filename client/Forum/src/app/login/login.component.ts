@@ -9,7 +9,7 @@ import { IonicModule } from '@ionic/angular';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule, IonicModule,ReactiveFormsModule],
+  imports: [FormsModule, CommonModule, RouterModule, IonicModule, ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -38,23 +38,29 @@ export class LoginComponent implements OnDestroy {
 
   login() {
     this.isLoading = true;
-    if (this.email && this.password) {
+
+    if (this.loginForm.valid) {
       this.errorMessage = '';
-      this.authSubscribe = this.authService.login(this.email, this.password).subscribe({
+      const { email, password } = this.loginForm.value;
+
+      this.authSubscribe = this.authService.login(email, password).subscribe({
         next: (data) => {
           if (data) {
             console.log(data);
             this.isLoading = false;
             this.router.navigateByUrl('/topic-list');
           }
-        }, error: (err) => {
+        },
+        error: (err) => {
           console.log(err);
+          this.errorMessage = 'Hibás email vagy jelszó.';
           this.isLoading = false;
         },
-      })
+      });
     } else {
       this.isLoading = false;
-      this.errorMessage = 'Form is empty.';
+      this.errorMessage = 'Kérlek töltsd ki az összes mezőt helyesen.';
+      this.loginForm.markAllAsTouched();
     }
   }
   get emailControl() { return this.loginForm.get('email'); }

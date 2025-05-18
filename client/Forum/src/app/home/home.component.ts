@@ -4,7 +4,9 @@ import { Router, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Category } from 'src/shared/models/Category.model';
+import { User } from 'src/shared/models/User.model';
 import { ApiService } from 'src/shared/services/api.service';
+import { AuthService } from 'src/shared/services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -17,13 +19,20 @@ import { ApiService } from 'src/shared/services/api.service';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   private apiSubscribe!: Subscription;
-
-  constructor(private apiService: ApiService, private router: Router) { }
+  private authSubscribe!: Subscription;
+  constructor(private apiService: ApiService, private router: Router, private authService: AuthService) { }
   
   categories?: Category[];
+  loggedInUser!: User
   ngOnInit() {
     this.apiSubscribe = this.apiService.getAllCategories().subscribe(data => {
       this.categories = data;
+    })
+
+    this.authSubscribe = this.authService.user$.subscribe(data => {
+      if (data) {
+        this.loggedInUser = data
+      }
     })
   }
 

@@ -5,11 +5,16 @@
     <ion-button shape="round" strong="true" [routerLink]="['/topic',categoryName,'submit']">Create new
       post</ion-button>
     }
-    <ion-card *ngFor="let post of posts" [routerLink]="['/topic',categoryName,post._id]">
-      <ion-card-title>
-        {{post.title}}
-      </ion-card-title>
-    </ion-card>
+    <div *ngFor="let post of posts" class="post-row">
+      <ion-card [routerLink]="['/topic', categoryName, post._id]">
+        <ion-card-title>{{ post.title }}</ion-card-title>
+      </ion-card>
+      @if(loggedInUser.role === 'admin'){
+      <ion-button color="danger" shape="round" (click)="deletePost(post._id!)">
+        Delete
+      </ion-button>
+      }
+    </div>
   </div>
 </ion-content>
 }

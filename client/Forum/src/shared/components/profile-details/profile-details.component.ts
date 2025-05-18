@@ -16,11 +16,9 @@ import { AuthService } from 'src/shared/services/auth.service';
     CommonModule
   ]
 })
-export class ProfileDetailsComponent implements OnInit,OnDestroy {
+export class ProfileDetailsComponent implements OnInit, OnDestroy {
 
-  private authSubscribe!: Subscription;
-  private apiSubscribe!: Subscription;
-  private routeSubscribe!: Subscription;
+  private subscription = new Subscription();
 
   constructor(
     private apiService: ApiService,
@@ -28,16 +26,14 @@ export class ProfileDetailsComponent implements OnInit,OnDestroy {
     private authService: AuthService,
   ) { }
   ngOnDestroy(): void {
-    this.apiSubscribe.unsubscribe()
-    this.authSubscribe.unsubscribe()
-    this.routeSubscribe.unsubscribe()
+    this.subscription.unsubscribe()
   }
 
   user!: User
   loggedInUser!: User
 
   ngOnInit() {
-    this.routeSubscribe = this.route.paramMap.subscribe(params => {
+    this.subscription.add(this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
         this.apiService.getUserById(id).subscribe(data => {
@@ -46,20 +42,22 @@ export class ProfileDetailsComponent implements OnInit,OnDestroy {
           }
         })
       }
-    });
-    this.authSubscribe = this.authService.user$.subscribe(data => {
+    })
+    );
+    this.subscription.add(this.authService.user$.subscribe(data => {
       if (data) {
         this.loggedInUser = data
       }
     })
+    );
   }
 
   deleteUser(userId: string) {
     if (confirm('Biztosan törölni szeretnéd ezt a felhasználót?')) {
-      this.apiSubscribe = this.apiService.deleteUser(userId).subscribe({
+      this.subscription.add(this.apiService.deleteUser(userId).subscribe({
         next: () => alert('User deleted'),
         error: (err) => console.error(err)
-      });
+      }));
     }
   }
 

@@ -8,25 +8,28 @@ import { AuthService } from 'src/shared/services/auth.service';
   selector: 'app-profile',
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
-  imports:[
+  imports: [
     IonicModule
   ]
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-  private authSubscribe!: Subscription;
+  private subscription = new Subscription();
 
   constructor(private authService: AuthService) { }
   ngOnDestroy(): void {
-    this.authSubscribe.unsubscribe()
+    this.subscription.unsubscribe()
   }
 
   user!: User
 
   ngOnInit() {
-    this.authService.user$.subscribe(data => {
+    this.subscription.add(this.authService.user$.subscribe(data => {
       if (data) {
         this.user = data;
+        console.log(data);
+        
       }
     })
+    )
   }
 }

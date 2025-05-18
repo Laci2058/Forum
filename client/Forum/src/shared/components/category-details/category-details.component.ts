@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Post } from 'src/shared/models/Post.model';
+import { User } from 'src/shared/models/User.model';
 import { ApiService } from 'src/shared/services/api.service';
 import { AuthService } from 'src/shared/services/auth.service';
 
@@ -25,31 +26,59 @@ export class CategoryDetailsComponent implements OnInit, OnDestroy {
   showInput = false;
   newPostTitle = '';
   isAuthenticated = false;
-  private apiSubsribe!: Subscription;
-  private authSubscribe!: Subscription;
+
+  private subscription = new Subscription();
 
   constructor(private route: ActivatedRoute,
     private apiService: ApiService,
-    private authService: AuthService,) { }
+    private authService: AuthService,
+  ) { }
+
   ngOnDestroy(): void {
-    this.apiSubsribe.unsubscribe()
-    this.authSubscribe.unsubscribe()
+    this.subscription.unsubscribe()
   }
+
+  loggedInUser!: User;
 
   ngOnInit() {
-    this.apiSubsribe = this.apiService.selectedCategory$.subscribe(category => {
-      if (category) {
-        this.categoryName = category.category_name;
-        this.categoryId = category._id!
-        this.apiService.getPostsByCategory(this.categoryId).subscribe(data => {
-          this.posts = data;
-        });
-      }
-    });
+    this.subscription.add(
+      this.apiService.selectedCategory$.subscribe(category => {
+        if (category) {
+          this.categoryName = category.category_name;
+          this.categoryId = category._id!
+          this.apiService.getPostsByCategory(this.categoryId).subscribe(data => {
+            this.posts = data;
+          });
+        }
+      })
+    )
 
-    this.authSubscribe = this.authService.isAuthenticated$.subscribe(isAuth => {
+    this.subscription.add(this.authService.isAuthenticated$.subscribe(isAuth => {
       this.isAuthenticated = isAuth;
-    });
+    })
+    )
+    this.subscription.add(
+      this.authService.user$.subscribe(data => {
+        if (data) {
+          this.loggedInUser = data
+        }
+      })
+    )
   }
 
+  deletePost(postId: string) {
+
+    if (confirm('Biztosan törlöd ezt a posztot?')) {
+      this.apiService.deletePost(postId).subscribe({
+        next: () => {
+          this.posts = this.posts.filter(p => p._id !== postId);
+          console.log("asdasd");
+          
+        },
+        error: (err) => {
+          console.error('Hiba törlés közben:', err);
+        }
+      });
+    }
+  }
 }

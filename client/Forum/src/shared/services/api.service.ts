@@ -16,6 +16,11 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
+
+  deletePost(postId: string) {
+    return this.http.delete(`http://localhost:5000/app/deletePost/${postId}`, { withCredentials: true });
+  }
+
   createComment(comment: Comment): Observable<Comment> {
     const body = new URLSearchParams();
     body.set('creator_id', comment.creator_id);

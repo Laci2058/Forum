@@ -4,10 +4,32 @@ import { PassportStatic } from 'passport';
 import { Post } from '../models/post';
 import { Comment } from '../models/comment'
 import { Category } from '../models/category'
+import { isAdmin } from '../middleware/roles';
 
 
 
 export const configureRoutes = (passport: PassportStatic, router: Router): Router => {
+
+  router.delete('/deletePost/:id', (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      res.status(401).send('Unauthorized');
+    }
+
+    const postId = req.params.id;
+
+    Post.findByIdAndDelete(postId)
+      .then(deletedPost => {
+        if (!deletedPost) {
+          res.status(404).send('Post not found.');
+        }
+        res.status(200).json({ message: 'Post deleted successfully.', post: deletedPost });
+      })
+      .catch(error => {
+        console.error('Error deleting post:', error);
+        res.status(500).send('Failed to delete post.');
+      });
+  });
+
 
   router.post('/createComment', (req: Request, res: Response) => {
     if (!req.isAuthenticated()) {
