@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { mUser } from 'src/shared/models/User.model';
+import { User } from 'src/shared/models/User.model';
 import { ApiService } from 'src/shared/services/api.service';
+import { AuthService } from 'src/shared/services/auth.service';
 
 @Component({
   selector: 'app-profile-details',
@@ -16,16 +16,13 @@ import { ApiService } from 'src/shared/services/api.service';
 })
 export class ProfileDetailsComponent implements OnInit {
 
-  constructor(private apiService: ApiService, private route: ActivatedRoute) { }
-  user!: mUser
+  constructor(private apiService: ApiService, private authService: AuthService) { }
+  user!: User
   ngOnInit() {
-    /*const userId = this.route.snapshot.paramMap.get('id');
-    if (userId) {
-      this.apiService.getMockUser(userId).subscribe(data => {
-        if (data) {
-          this.user = data;
-        }
-      })
-    }*/
+    this.authService.user$.subscribe(data => {
+      if (data) {
+        this.user = data;
+      }
+    })
   }
 }

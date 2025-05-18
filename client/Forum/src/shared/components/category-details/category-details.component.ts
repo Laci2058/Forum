@@ -19,7 +19,8 @@ import { AuthService } from 'src/shared/services/auth.service';
 export class CategoryDetailsComponent implements OnInit {
 
   categoryName: string | null = null;
-  posts!: Post[]
+  categoryId!: string;
+  posts!: Post[];
   showInput = false;
   newPostTitle = '';
   isAuthenticated = false;
@@ -32,7 +33,8 @@ export class CategoryDetailsComponent implements OnInit {
     this.apiService.selectedCategory$.subscribe(category => {
       if (category) {
         this.categoryName = category.category_name;
-        this.apiService.getPostsByCategory(category._id).subscribe(data => {
+        this.categoryId = category._id!
+        this.apiService.getPostsByCategory(this.categoryId).subscribe(data => {
           this.posts = data;
         });
       }

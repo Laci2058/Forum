@@ -27,6 +27,7 @@ export class PostDetailsComponent implements OnInit {
   comments!: Comment[];
   post!: Post;
   isAuthenticated = false;
+  newCommentText = '';
 
   ngOnInit() {
     const postId = this.route.snapshot.paramMap.get('pid');
@@ -44,6 +45,26 @@ export class PostDetailsComponent implements OnInit {
     }
     this.authService.isAuthenticated$.subscribe(isAuth => {
       this.isAuthenticated = isAuth;
+    });
+  }
+
+  
+
+  submitComment() {
+    if (!this.newCommentText.trim() || !this.post || !this.authService.user$) return;
+
+    this.authService.user$.subscribe(user => {
+      if (!user) return;
+      const newComment: Comment = {
+        creator_id: user._id!,
+        creator_nickname: user.nickname!,
+        post_id: this.post._id!,
+        text: this.newCommentText
+      }
+      this.apiService.createComment(newComment).subscribe(comment => {
+        this.comments.push(comment);
+        this.newCommentText = '';
+      });
     });
   }
 }

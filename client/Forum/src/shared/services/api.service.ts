@@ -11,23 +11,38 @@ import { Comment } from '../models/Comment.model';
 })
 export class ApiService {
 
-    private selectedCategory = new BehaviorSubject<Category | null>(null);
-    selectedCategory$ = this.selectedCategory.asObservable();
-    
+  private selectedCategory = new BehaviorSubject<Category | null>(null);
+  selectedCategory$ = this.selectedCategory.asObservable();
+
   constructor(private http: HttpClient) { }
+
+  createComment(comment: Comment): Observable<Comment> {
+    const body = new URLSearchParams();
+    body.set('creator_id', comment.creator_id);
+    body.set('creator_nickname', comment.creator_nickname);
+    body.set('post_id', comment.post_id);
+    body.set('text', comment.text);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded'
+    });
+
+    return this.http.post<Comment>('http://localhost:5000/app/createComment', body, { headers: headers, withCredentials: true });
+  }
+
   /* user */
   getUserById(userId: string): Observable<User | null> {
-      const body = { userId };
-  
-      return this.http.post<User>('http://localhost:5000/app/getUserById', body, { withCredentials: true }).pipe(
-        catchError(err => {
-          return of(null);
-        })
-      );
-    }
+    const body = { userId };
 
-    /* post */
-      createPost(post: Post) {
+    return this.http.post<User>('http://localhost:5000/app/getUserById', body, { withCredentials: true }).pipe(
+      catchError(err => {
+        return of(null);
+      })
+    );
+  }
+
+  /* post */
+  createPost(post: Post) {
     const body = new URLSearchParams();
     body.set('creator_id', post.creator_id);
     body.set('creator_nickname', post.creator_nickname);
@@ -44,7 +59,7 @@ export class ApiService {
 
   getPostsByCategory(categoryId: string): Observable<Post[]> {
     const body = { categoryId }
-    return this.http.post<Post[]>('http://localhost:5000/app/getPostsByCategory', body , {
+    return this.http.post<Post[]>('http://localhost:5000/app/getPostsByCategory', body, {
       withCredentials: true
     });
   }

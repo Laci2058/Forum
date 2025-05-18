@@ -1,23 +1,25 @@
-<div *ngIf="post">
+@if(post)
+{
+<ion-card>
+  <ion-card-title>{{post.title}}</ion-card-title>
+  <ion-card-subtitle>{{post.text}}</ion-card-subtitle>
+</ion-card>
+<div *ngFor="let comment of comments">
   <ion-card>
-    <ion-card-title>{{post.title}}</ion-card-title>
-    <ion-card-subtitle>{{post.text}}</ion-card-subtitle>
+    <a [routerLink]="['/profile',comment.creator_id]">
+      <ion-card-header>{{comment.creator_nickname}}</ion-card-header></a>
+    {{comment.text}}
   </ion-card>
-  <div *ngFor="let comment of comments">
-    <ion-card>
-      <a [routerLink]="['/profile',comment.creator_id]">
-        <ion-card-header>{{comment.creator_nickname}}</ion-card-header></a>
-      {{comment.text}}
-    </ion-card>
-  </div>
-  @if(isAuthenticated){
-  <ion-content class="ion-padding">
-    <form>
-      <ion-input type="text" fill="outline" shape="round" name="title" placeholder="Add a new comment"></ion-input>
-      <ion-button expand="full" type="submit">
-        Comment
-      </ion-button>
-    </form>
-  </ion-content>
-  }
 </div>
+@if(isAuthenticated){
+<ion-content class="ion-padding" *ngIf="isAuthenticated">
+  <form (ngSubmit)="submitComment()">
+    <ion-input type="text" [(ngModel)]="newCommentText" name="comment" fill="outline" shape="round"
+      placeholder="Add a new comment" required></ion-input>
+    <ion-button expand="full" type="submit">
+      Comment
+    </ion-button>
+  </form>
+</ion-content>
+}
+}

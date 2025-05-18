@@ -9,6 +9,34 @@ import { Category } from '../models/category'
 
 export const configureRoutes = (passport: PassportStatic, router: Router): Router => {
 
+  router.post('/createComment', (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      res.status(401).send('Unauthorized');
+    }
+
+    const { post_id, creator_id, creator_nickname, text } = req.body;
+
+    if (!post_id || !creator_id || !creator_nickname || !text) {
+      res.status(400).send('Missing required fields');
+    }
+
+    const comment = new Comment({
+      post_id,
+      creator_id,
+      creator_nickname,
+      text
+    });
+
+    comment.save()
+      .then(savedComment => {
+        res.status(201).json(savedComment);
+      })
+      .catch(error => {
+        console.error(error);
+        res.status(500).send('Failed to create comment.');
+      });
+  });
+
   router.post('/getCommentsByPostId', (req: Request, res: Response) => {
 
     const postId = req.body.postId;
@@ -23,7 +51,7 @@ export const configureRoutes = (passport: PassportStatic, router: Router): Route
 
 
   router.post('/getPostById', (req: Request, res: Response) => {
-    
+
     const postId = req.body.postId;
 
     Post.findById(postId)

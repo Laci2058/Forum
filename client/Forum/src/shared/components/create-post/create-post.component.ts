@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgModel } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { Category } from 'src/shared/models/Category.model';
 import { Post } from 'src/shared/models/Post.model';
 import { User } from 'src/shared/models/User.model';
 import { ApiService } from 'src/shared/services/api.service';
@@ -20,15 +21,19 @@ import { AuthService } from 'src/shared/services/auth.service';
 })
 export class CreatePostComponent implements OnInit {
 
-  catId!: string | null;
-  constructor(private apiService: ApiService, private authService: AuthService, private route: ActivatedRoute) {
-    this.catId = this.route.snapshot.paramMap.get('id');
-  }
+  category!: Category
+
+  constructor(private apiService: ApiService, private authService: AuthService, private route: ActivatedRoute) { }
   user!: User
   ngOnInit() {
     this.authService.user$.subscribe(user => {
       if (user) {
         this.user = user
+      }
+    })
+    this.apiService.selectedCategory$.subscribe(category => {
+      if (category) {
+        this.category = category;
       }
     })
 
@@ -40,14 +45,15 @@ export class CreatePostComponent implements OnInit {
 
   onSubmit() {
     console.log(this.user);
-    
+
     const newPost: Post = {
-      creator_id: this.user._id,
+      creator_id: this.user._id!,
       creator_nickname: this.user.nickname,
-      category_id: this.catId!,
+      category_id: this.category._id!,
       title: this.post.title!,
       text: this.post.text!
     };
+
     this.apiService.createPost(newPost).subscribe({
       next: (data) => {
         console.log(data)

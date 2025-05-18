@@ -1,3 +1,4 @@
+@if (categories) {
 <div class="category-container">
   <ion-card button *ngFor="let category of categories" (click)="navigateToTopics(category)">
     <ion-card-title>
@@ -5,3 +6,4 @@
     </ion-card-title>
   </ion-card>
 </div>
+}
