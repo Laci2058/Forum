@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Category } from 'src/shared/models/Category.model';
@@ -23,29 +23,24 @@ import { AuthService } from 'src/shared/services/auth.service';
 export class CreatePostComponent implements OnInit, OnDestroy {
 
   category!: Category
-  private authSubscribe!: Subscription;
-  private apiSubscribe!: Subscription;
-  private apiSubmitSubscribe!: Subscription;
+  private subscription = new Subscription();
 
-  constructor(private apiService: ApiService, private authService: AuthService, private route: ActivatedRoute) { }
+  constructor(private apiService: ApiService, private authService: AuthService, private router: Router,) { }
   ngOnDestroy(): void {
-    this.apiSubscribe.unsubscribe()
-    this.authSubscribe.unsubscribe()
-    this.apiSubmitSubscribe.unsubscribe()
+    this.subscription.unsubscribe();
   }
   user!: User
   ngOnInit() {
-    this.authSubscribe = this.authService.user$.subscribe(user => {
+    this.subscription.add(this.authService.user$.subscribe(user => {
       if (user) {
         this.user = user
       }
-    })
-     this.apiSubscribe = this.apiService.selectedCategory$.subscribe(category => {
+    }))
+    this.subscription.add(this.apiService.selectedCategory$.subscribe(category => {
       if (category) {
         this.category = category;
       }
-    })
-
+    }))
   }
   post: Partial<Post> = {
     title: '',
@@ -53,8 +48,6 @@ export class CreatePostComponent implements OnInit, OnDestroy {
   };
 
   onSubmit() {
-    console.log(this.user);
-
     const newPost: Post = {
       creator_id: this.user._id!,
       creator_nickname: this.user.nickname,
@@ -63,10 +56,10 @@ export class CreatePostComponent implements OnInit, OnDestroy {
       text: this.post.text!
     };
 
-    this.apiSubmitSubscribe = this.apiService.createPost(newPost).subscribe({
+    this.subscription.add(this.apiService.createPost(newPost).subscribe({
       next: (data) => {
-        console.log(data)
+        this.router.navigate(['/topic', this.category.category_name, data._id])
       }
-    })
+    }))
   }
 }

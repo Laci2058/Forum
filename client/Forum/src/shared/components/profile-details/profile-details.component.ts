@@ -55,8 +55,7 @@ export class ProfileDetailsComponent implements OnInit, OnDestroy {
   deleteUser(userId: string) {
     if (confirm('Biztosan törölni szeretnéd ezt a felhasználót?')) {
       this.subscription.add(this.apiService.deleteUser(userId).subscribe({
-        next: () => alert('User deleted'),
-        error: (err) => console.error(err)
+        next: () => alert('User deleted')
       }));
     }
   }

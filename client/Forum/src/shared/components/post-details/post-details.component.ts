@@ -101,11 +101,9 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
     if (confirm('Biztosan törlöd ezt a posztot?')) {
       this.subscription.add(this.apiService.deleteComment(commentId).subscribe({
         next: () => {
-          console.log('Comment deleted successfully');
           this.comments = this.comments.filter(c => c._id !== commentId);
         },
         error: (err) => {
-          console.error('Failed to delete comment:', err);
           alert('Failed to delete comment');
         }
       }));

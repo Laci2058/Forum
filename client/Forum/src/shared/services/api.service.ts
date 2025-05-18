@@ -65,7 +65,7 @@ export class ApiService {
       'Content-Type': 'application/x-www-form-urlencoded'
     });
 
-    return this.http.post('http://localhost:5000/app/createPost', body, { headers: headers, withCredentials: true });
+    return this.http.post<Post>('http://localhost:5000/app/createPost', body, { headers: headers, withCredentials: true });
   }
 
   getPostsByCategory(categoryId: string): Observable<Post[]> {

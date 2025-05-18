@@ -1,0 +1,20 @@
+.post-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.base-card {
+  width: 100%;
+  max-width: 80%;
+  margin: auto;
+  padding: 10px;
+}
+ion-label{
+  padding-bottom: 16px;
+}
+ion-button{
+  margin-left: 0;
+  padding-top: 16px;
+}

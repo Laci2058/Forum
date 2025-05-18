@@ -46,13 +46,11 @@ export class LoginComponent implements OnDestroy {
       this.authSubscribe = this.authService.login(email, password).subscribe({
         next: (data) => {
           if (data) {
-            console.log(data);
             this.isLoading = false;
             this.router.navigateByUrl('/topic-list');
           }
         },
         error: (err) => {
-          console.log(err);
           this.errorMessage = 'Hibás email vagy jelszó.';
           this.isLoading = false;
         },

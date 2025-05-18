@@ -51,8 +51,8 @@ import { Subscription } from 'rxjs';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  private authSubscribe!: Subscription;
-  private LoginAuthSubscribe!: Subscription;
+  private subscription = new Subscription();
+
   constructor(private authService: AuthService, private router: Router) {
     addIcons({
       'home-outline': homeOutline,
@@ -66,24 +66,20 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
   ngOnDestroy(): void {
-    this.authSubscribe.unsubscribe()
-    this.LoginAuthSubscribe.unsubscribe()
+    this.subscription.unsubscribe();
   }
   isAuthenticated: boolean = false;
 
   ngOnInit() {
-    this.authSubscribe = this.authService.isAuthenticated$.subscribe(isAuth => {
+    this.subscription.add(this.authService.isAuthenticated$.subscribe(isAuth => {
       this.isAuthenticated = isAuth;
-    });
+    }));
   }
   logout() {
-    this.LoginAuthSubscribe = this.authService.logout().subscribe({
+    this.subscription.add(this.authService.logout().subscribe({
       next: (data) => {
-        console.log(data);
         this.router.navigateByUrl('/login');
-      }, error: (err) => {
-        console.log(err);
       }
-    })
+    }));
   }
 }

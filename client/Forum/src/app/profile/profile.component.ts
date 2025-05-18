@@ -26,8 +26,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.subscription.add(this.authService.user$.subscribe(data => {
       if (data) {
         this.user = data;
-        console.log(data);
-        
       }
     })
     )

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Category } from 'src/shared/models/Category.model';
@@ -18,22 +18,21 @@ import { AuthService } from 'src/shared/services/auth.service';
   ]
 })
 export class HomeComponent implements OnInit, OnDestroy {
-  private apiSubscribe!: Subscription;
-  private authSubscribe!: Subscription;
+  private subscription = new Subscription();
   constructor(private apiService: ApiService, private router: Router, private authService: AuthService) { }
-  
+
   categories?: Category[];
   loggedInUser!: User
   ngOnInit() {
-    this.apiSubscribe = this.apiService.getAllCategories().subscribe(data => {
+    this.subscription.add(this.apiService.getAllCategories().subscribe(data => {
       this.categories = data;
-    })
+    }));
 
-    this.authSubscribe = this.authService.user$.subscribe(data => {
+    this.subscription.add(this.authService.user$.subscribe(data => {
       if (data) {
         this.loggedInUser = data
       }
-    })
+    }))
   }
 
   navigateToTopics(category: Category) {
@@ -43,7 +42,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.apiSubscribe.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
 }
