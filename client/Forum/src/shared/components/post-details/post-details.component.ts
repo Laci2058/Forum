@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgModule, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Comment } from 'src/shared/models/Comment.model';
@@ -27,7 +27,9 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
-    private route: ActivatedRoute) { }
+    private route: ActivatedRoute,
+    private router: Router,
+  ) { }
   ngOnDestroy(): void {
     this.subscription.unsubscribe()
   }
@@ -36,9 +38,11 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   isAuthenticated = false;
   newCommentText = '';
   loggedInUser!: User;
+  categoryName!:string;
 
   ngOnInit() {
     const postId = this.route.snapshot.paramMap.get('pid');
+    this.categoryName = this.route.snapshot.paramMap.get('id')!;
     if (postId) {
       this.subscription.add(this.apiService.getPostById(postId).subscribe(data => {
         if (data) {
@@ -83,7 +87,9 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   deletePost(postId: string) {
     if (confirm('Biztosan törlöd ezt a posztot?')) {
       this.subscription.add(this.apiService.deletePost(postId).subscribe({
-        next: () => { },
+        next: () => {
+          this.router.navigate(['/topic',this.categoryName]);
+         },
         error: (err) => {
           console.error('Hiba törlés közben:', err);
         }

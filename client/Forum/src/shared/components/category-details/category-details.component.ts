@@ -41,6 +41,18 @@ export class CategoryDetailsComponent implements OnInit, OnDestroy {
   loggedInUser!: User;
 
   ngOnInit() {
+
+    this.route.params.subscribe(params => {
+      this.loadPosts();
+    });
+
+    this.subscription.add(this.authService.isAuthenticated$.subscribe(isAuth => {
+      this.isAuthenticated = isAuth;
+    })
+    )
+  }
+  
+  loadPosts() {
     this.subscription.add(
       this.apiService.selectedCategory$.subscribe(category => {
         if (category) {
@@ -52,10 +64,6 @@ export class CategoryDetailsComponent implements OnInit, OnDestroy {
         }
       })
     )
-
-    this.subscription.add(this.authService.isAuthenticated$.subscribe(isAuth => {
-      this.isAuthenticated = isAuth;
-    })
-    )
   }
+
 }

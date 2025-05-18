@@ -3,7 +3,7 @@ import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormsModule } 
 import { AuthService } from '../../shared/services/auth.service';
 import { CommonModule, Location } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -17,7 +17,8 @@ export class SignupComponent {
   constructor(
     private formBuilder: FormBuilder,
     private location: Location,
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router,
   ) { }
 
   ngOnInit() {
@@ -53,6 +54,7 @@ export class SignupComponent {
       console.log('Form data:', this.signupForm.value);
       this.authService.register(this.signupForm.value).subscribe({
         next: (data) => {
+          this.router.navigate(['/login']);
           console.log(data);
         }, error: (err) => {
           console.log(err);
