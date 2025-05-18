@@ -1,15 +1,63 @@
-<div class="login-container">
-  <form class="login-form" (ngSubmit)="login()">
-    <input [(ngModel)]="email" name="email" type="email" placeholder="Email" required />
-    <input [(ngModel)]="password" name="password" type="password" placeholder="Password" required />
-    <div class="buttons">
-      <button type="submit">Login</button>
-    </div>
-    <div class="buttons">
-      <button type="button" routerLink="/signup">Sign Up</button>
-    </div>
-    <div *ngIf="errorMessage">
-      <p>{{errorMessage}}</p>
-    </div>
-  </form>
+<div class="ion-padding ion-text-center login-container">
+  <ion-card class="base-card">
+    <ion-card-header>
+      <ion-card-title>Forum</ion-card-title>
+      <ion-card-subtitle>Sign in</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <ion-list lines="none">
+          <ion-item style="--padding-start: 0px; --inner-padding-end: 0px">
+            <ion-label position="stacked">Email</ion-label>
+            <ion-input fill="outline" placeholder="Email" class="ion-margin-top" formControlName="email"
+              [color]="emailControl?.invalid && emailControl?.touched ? 'danger' : ''">
+              <ion-icon slot="start" name="mail"></ion-icon>
+            </ion-input>
+            @if (emailControl?.invalid && emailControl?.touched) {
+            <ion-note color="danger">
+              {{ getEmailErrorMessage() }}
+            </ion-note>
+            }
+          </ion-item>
+
+          <ion-item style="--padding-start: 0px; --inner-padding-end: 0px">
+            <ion-label position="stacked">Password</ion-label>
+            <ion-input placeholder="Password" fill="outline" type="password" class="ion-margin-top"
+              formControlName="password" [color]="passwordControl?.invalid && passwordControl?.touched ? 'danger' : ''">
+              <ion-icon slot="start" name="lock-closed"></ion-icon>
+            </ion-input>
+            @if (passwordControl?.invalid && passwordControl?.touched) {
+            <ion-note color="danger">
+              {{ getPasswordErrorMessage() }}
+            </ion-note>
+            }
+          </ion-item>
+
+          @if (errorMessage) {
+          <ion-item lines="none">
+            <ion-text color="danger">{{ errorMessage }}</ion-text>
+          </ion-item>
+          }
+
+          <ion-button color="dark" class="ion-margin-top" type="submit" expand="block" [disabled]="isLoading">
+            @if (isLoading) {
+            <ion-spinner name="crescent" class="ion-text-center"></ion-spinner>
+            } @else {
+            <span>SIGN_IN</span>
+            }
+          </ion-button>
+
+          <div class="ion-text-center ion-padding-top">
+            <div class="ion-padding-top">
+              <a class="forgot" href="#">Forgot your password?</a>
+            </div>
+            <div class="ion-padding-top">
+              <ion-text>No account? <a [routerLink]="['/signup']">SIGN_UP</a></ion-text>
+            </div>
+          </div>
+        </ion-list>
+      </form>
+    </ion-card-content>
+  </ion-card>
 </div>

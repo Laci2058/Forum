@@ -1,28 +1,69 @@
-<div class="login-container">
-  <form class="login-form" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-      <input formControlName="email" type="email" placeholder="Email" required [ngClass]="{'invalid-input': signupForm.get('email')?.errors}" />
-      <div *ngIf="signupForm.get('email')?.invalid && (signupForm.get('email')?.dirty || signupForm.get('email')?.touched)">
-          <p *ngIf="signupForm.get('email')?.errors && signupForm.get('email')?.errors!['required']">Email is required.</p>
-          <p *ngIf="signupForm.get('email')?.errors && signupForm.get('email')?.errors!['email']">Please enter a valid email.</p>
-      </div>
-      <input formControlName="name" type="text" placeholder="Name" />
-      <input formControlName="address" type="text" placeholder="Address" />
-      <input formControlName="nickname" type="text" placeholder="Nickname" />
-      <input formControlName="password" type="password" placeholder="Password" required [ngClass]="{'invalid-input': signupForm.get('password')?.errors}" />
-      <div *ngIf="signupForm.get('password')?.invalid && (signupForm.get('password')?.dirty || signupForm.get('password')?.touched)">
-          <p *ngIf="signupForm.get('password')?.errors && signupForm.get('password')?.errors!['required']">Password is required.</p>
-          <p *ngIf="signupForm.get('password')?.errors && signupForm.get('password')?.errors!['minlength']">Password must be at least 6 characters.</p>
-      </div>
-      <input formControlName="confirmPassword" type="password" placeholder="Confirm password" required [ngClass]="{'invalid-input': signupForm.get('confirmPassword')?.errors}" />
-      <div *ngIf="signupForm.get('confirmPassword')?.invalid && (signupForm.get('confirmPassword')?.dirty || signupForm.get('confirmPassword')?.touched)">
-          <p *ngIf="signupForm.get('confirmPassword')?.errors && signupForm.get('confirmPassword')?.errors!['required']">Confirming password is required.</p>
-          <p *ngIf="signupForm.get('confirmPassword')?.errors && signupForm.get('confirmPassword')?.errors!['mustMatch']">Passwords must match.</p>
-      </div>
-      <div class="buttons">
-          <button type="submit">Sign Up</button>
-      </div>
-      <div class="buttons">
-          <button type="reset" (click)="goBack()">Back</button>
-      </div>
-  </form>
+<div class="ion-padding ion-text-center signup-container">
+  <ion-card class="base-card">
+    <ion-card-header>
+      <ion-card-title>Forum</ion-card-title>
+      <ion-card-subtitle>Sign Up</ion-card-subtitle>
+    </ion-card-header>
+
+    <ion-card-content>
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+        <ion-list lines="none">
+          <!-- Email -->
+          <ion-item>
+            <ion-label position="stacked">Email</ion-label>
+            <ion-input type="email" formControlName="email" fill="outline" placeholder="example@example.com"
+              [color]="signupForm.get('email')?.invalid && signupForm.get('email')?.touched ? 'danger' : ''">
+            </ion-input>
+          </ion-item>
+          <ion-note color="danger" *ngIf="signupForm.get('email')?.invalid && signupForm.get('email')?.touched">
+            Please enter a valid email address.
+          </ion-note>
+
+          <!-- Username (required now) -->
+          <ion-item>
+            <ion-label position="stacked">Username</ion-label>
+            <ion-input type="text" formControlName="nickname" fill="outline" placeholder="Enter a username"
+              [color]="signupForm.get('nickname')?.invalid && signupForm.get('nickname')?.touched ? 'danger' : ''">
+            </ion-input>
+          </ion-item>
+          <ion-note color="danger" *ngIf="signupForm.get('nickname')?.invalid && signupForm.get('nickname')?.touched">
+            Username is required.
+          </ion-note>
+
+          <!-- Password -->
+          <ion-item>
+            <ion-label position="stacked">Password</ion-label>
+            <ion-input type="password" formControlName="password" fill="outline" placeholder="Password"
+              [color]="signupForm.get('password')?.invalid && signupForm.get('password')?.touched ? 'danger' : ''">
+            </ion-input>
+          </ion-item>
+          <ion-note color="danger" *ngIf="signupForm.get('password')?.invalid && signupForm.get('password')?.touched">
+            Password must be at least 6 characters long.
+          </ion-note>
+
+          <!-- Confirm Password -->
+          <ion-item>
+            <ion-label position="stacked">Confirm Password</ion-label>
+            <ion-input type="password" formControlName="confirmPassword" fill="outline"
+              placeholder="Repeat your password"
+              [color]="signupForm.get('confirmPassword')?.errors?.['mustMatch'] && signupForm.get('confirmPassword')?.touched ? 'danger' : ''">
+            </ion-input>
+          </ion-item>
+          <ion-note color="danger"
+            *ngIf="signupForm.get('confirmPassword')?.errors?.['mustMatch'] && signupForm.get('confirmPassword')?.touched">
+            Passwords do not match.
+          </ion-note>
+
+          <!-- Submit Button -->
+          <ion-button expand="block" type="submit" class="ion-margin-top" [disabled]="signupForm.invalid">
+            Sign Up
+          </ion-button>
+
+          <div class="ion-text-center ion-padding-top">
+            <ion-text>Already have an account? <a [routerLink]="['/login']">Sign In</a></ion-text>
+          </div>
+        </ion-list>
+      </form>
+    </ion-card-content>
+  </ion-card>
 </div>

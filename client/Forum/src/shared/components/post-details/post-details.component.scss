@@ -1,4 +1,4 @@
-.post, .comment-card {
+.post {
   width: 70%;
   margin: 16px auto; /* középre igazítás */
   background-color: #1e1e1e;
@@ -22,7 +22,7 @@ ion-card-subtitle {
 }
 
 .comment-form {
-  width: 100%;
+  width: 70%;
   max-width: 600px;
   margin: 0 auto;
 }

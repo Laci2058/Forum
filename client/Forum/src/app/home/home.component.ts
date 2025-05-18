@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   navigateToTopics(category: Category) {
     this.apiService.setCategoryId(category);
-    this.router.navigate(['/topics', category.category_name]);
+    this.router.navigate(['/topic', category.category_name]);
 
   }
 

@@ -1,18 +1,20 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
 import { Subscription } from 'rxjs';
+import { IonicModule } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, CommonModule, RouterModule],
+  imports: [FormsModule, CommonModule, RouterModule, IonicModule,ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnDestroy {
+  loginForm: FormGroup;
   email: string = '';
   password: string = '';
   errorMessage: string = '';
@@ -20,7 +22,16 @@ export class LoginComponent implements OnDestroy {
 
   private authSubscribe!: Subscription;
 
-  constructor(private router: Router, private authService: AuthService) { }
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+    private formBuilder: FormBuilder,
+  ) {
+    this.loginForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
+    });
+  }
   ngOnDestroy(): void {
     this.authSubscribe.unsubscribe()
   }
@@ -34,7 +45,7 @@ export class LoginComponent implements OnDestroy {
           if (data) {
             console.log(data);
             this.isLoading = false;
-            this.router.navigateByUrl('/topics');
+            this.router.navigateByUrl('/topic-list');
           }
         }, error: (err) => {
           console.log(err);
@@ -45,6 +56,25 @@ export class LoginComponent implements OnDestroy {
       this.isLoading = false;
       this.errorMessage = 'Form is empty.';
     }
+  }
+  get emailControl() { return this.loginForm.get('email'); }
+  get passwordControl() { return this.loginForm.get('password'); }
+
+  getEmailErrorMessage() {
+    if (this.emailControl?.hasError('required')) {
+      return 'The email address is required';
+    }
+    if (this.emailControl?.hasError('email')) {
+      return 'Please, type a valid email address';
+    }
+    return '';
+  }
+
+  getPasswordErrorMessage() {
+    if (this.passwordControl?.hasError('required')) {
+      return 'The password is required';
+    }
+    return '';
   }
 
 }

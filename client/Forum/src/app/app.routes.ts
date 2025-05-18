@@ -6,19 +6,19 @@ export const routes: Routes = [
   
   
   {
-    path: 'topics/:id/submit',
+    path: 'topic/:id/submit',
     loadComponent: () => import('../shared/components/create-post/create-post.component').then((c) => c.CreatePostComponent),
   },
   {
-    path: 'topics/:id/:pid',
+    path: 'topic/:id/:pid',
     loadComponent: () => import('../shared/components/post-details/post-details.component').then((c) => c.PostDetailsComponent),
   },
   {
-    path: 'topics/:id',
+    path: 'topic/:id',
     loadComponent: () => import('../shared/components/category-details/category-details.component').then((c) => c.CategoryDetailsComponent),
   },
   {
-    path: 'topics',
+    path: 'topic-list',
     loadComponent: () => import('./home/home.component').then((c) => c.HomeComponent)
   },
   {
@@ -38,5 +38,4 @@ export const routes: Routes = [
     loadComponent: () => import('./profile/profile.component').then((c) => c.ProfileComponent), canActivate: [authGuard]
   },
   { path: '**', redirectTo: 'home' }
-  //TODO: settings
 ];
