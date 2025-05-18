@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { of, delay, map } from 'rxjs';
-import { MOCK_COMMENTS, MOCK_POST } from '../mock-data/mock-data';
-import { mPost } from '../models/Post.model';
+import { of, Observable, catchError } from 'rxjs';
+import { Post } from '../models/Post.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Comment } from '../models/Comment.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class PostService {
 
   constructor(private http: HttpClient) { }
 
-  createPost(post: mPost) {
+  createPost(post: Post) {
     const body = new URLSearchParams();
     body.set('creator_id', post.creator_id);
     body.set('creator_nickname', post.creator_nickname);
@@ -26,22 +26,30 @@ export class PostService {
     return this.http.post('http://localhost:5000/app/createPost', body, { headers: headers, withCredentials: true });
   }
 
-  getPostsByCategory(categoryId: string) {
-    return of(MOCK_POST).pipe(
-      delay(100),
-      map(posts => posts.filter(post => post.category_id === categoryId))
+  getPostsByCategory(categoryId: string): Observable<Post[]> {
+    const body = { categoryId }
+    return this.http.post<Post[]>('http://localhost:5000/app/getPostsByCategory', body , {
+      withCredentials: true
+    });
+  }
+
+  getPostById(postId: string): Observable<Post | null> {
+    const body = { postId }
+
+    return this.http.post<Post>('http://localhost:5000/app/getPostById', body, {
+      withCredentials: true
+    }).pipe(
+      catchError(err => {
+        console.error('Hiba a post lekérdezésekor:', err);
+        return of(null);
+      })
     );
   }
-  getPostById(postId: string) {
-    return of(MOCK_POST).pipe(
-      delay(20),
-      map(posts => posts.find(post => post.post_id === postId))
-    );
-  }
-  getCommentsByPostId(postId: string) {
-    return of(MOCK_COMMENTS).pipe(
-      delay(20),
-      map(comments => comments.filter(comment => comment.post_id === postId))
-    );
+
+  getCommentsByPostId(postId: string): Observable<Comment[]> {
+    const body = { postId }
+    return this.http.post<Comment[]>('http://localhost:5000/app/getCommentsByPostId', body, {
+      withCredentials: true
+    });
   }
 }

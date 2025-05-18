@@ -2,7 +2,7 @@
   @if(isAuthenticated){
   <ion-button [routerLink]="['/topics',categoryId,'submit']">Create new post</ion-button>
   }
-  <ion-card *ngFor="let post of posts" [routerLink]="['/topics',categoryId,post.post_id]">
+  <ion-card *ngFor="let post of posts" [routerLink]="['/topics',categoryId,post._id]">
     <ion-card-title>
       {{post.title}}
     </ion-card-title>

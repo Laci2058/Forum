@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { mComment } from 'src/shared/models/Comment.model';
-import { mPost } from 'src/shared/models/Post.model';
+import { Comment } from 'src/shared/models/Comment.model';
+import { Post } from 'src/shared/models/Post.model';
 import { PostService } from 'src/shared/services/post.service';
 
 @Component({
@@ -18,8 +18,8 @@ import { PostService } from 'src/shared/services/post.service';
 })
 export class PostDetailsComponent implements OnInit {
   constructor(private postService: PostService, private route: ActivatedRoute) { }
-  comments!: mComment[];
-  post!: mPost
+  comments!: Comment[];
+  post!: Post
 
   ngOnInit() {
     const postId = this.route.snapshot.paramMap.get('pid');

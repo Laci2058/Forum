@@ -3,10 +3,66 @@ import { User } from '../models/user';
 import { PassportStatic } from 'passport';
 import { Post } from '../models/post';
 import { Comment } from '../models/comment'
+import { Category } from '../models/category'
 
 
 
 export const configureRoutes = (passport: PassportStatic, router: Router): Router => {
+
+  router.post('/getCommentsByPostId', (req: Request, res: Response) => {
+
+    const postId = req.body.postId;
+
+    Comment.find({ post_id: postId })
+      .then(comments => res.status(200).json(comments))
+      .catch(error => {
+        console.error('Error fetching comments by post ID:', error);
+        res.status(500).send('Failed to fetch comments.');
+      });
+  });
+
+
+  router.post('/getPostById', (req: Request, res: Response) => {
+    
+    const postId = req.body.postId;
+
+    Post.findById(postId)
+      .then(post => {
+        if (!post) {
+          res.status(404).send('Post not found');
+        }
+        res.status(200).json(post);
+      })
+      .catch(error => {
+        console.error('Error fetching post by ID:', error);
+        res.status(500).send('Failed to fetch post.');
+      });
+  });
+
+
+  router.post('/getPostsByCategory', (req: Request, res: Response) => {
+
+    const categoryId = req.body.categoryId;
+
+    Post.find({ category_id: categoryId })
+      .then(posts => res.status(200).json(posts))
+      .catch(error => {
+        console.error('Error fetching posts by category:', error);
+        res.status(500).send('Failed to fetch posts.');
+      });
+  });
+
+
+  router.get('/getAllCategories', (req: Request, res: Response) => {
+    Category.find()
+      .then(categories => {
+        res.status(200).json(categories);
+      })
+      .catch(error => {
+        console.error('Hiba a kategóriák lekérdezésekor:', error);
+        res.status(500).send('Hiba történt a kategóriák lekérdezése közben.');
+      });
+  });
 
   router.post('/getUserById', (req: Request, res: Response) => {
     if (!req.isAuthenticated()) {

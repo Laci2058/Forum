@@ -1,4 +1,5 @@
-export interface mComment {
+export interface Comment {
+  _id:string
   comment_id: string;
   creator_id: string;
   creator_nickname: string;

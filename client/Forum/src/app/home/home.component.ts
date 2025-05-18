@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { IonCard, IonicModule } from '@ionic/angular';
-import { mCategory } from 'src/shared/models/Category.model';
+import { Router, RouterLink } from '@angular/router';
+import { IonicModule } from '@ionic/angular';
+import { Category } from 'src/shared/models/Category.model';
 import { CategoryService } from 'src/shared/services/category.service';
 
 @Component({
@@ -12,18 +12,22 @@ import { CategoryService } from 'src/shared/services/category.service';
   imports: [
     CommonModule,
     IonicModule,
-    RouterLink
   ]
 })
 export class HomeComponent  implements OnInit {
 
-  constructor(private categoryService: CategoryService) { }
-  categories?: mCategory[];
+  constructor(private categoryService: CategoryService, private router: Router) { }
+  categories?: Category[];
   ngOnInit() {
-   this.categoryService.getMockCategories().subscribe(data => {
+   this.categoryService.getAllCategories().subscribe(data => {
       this.categories = data;
-      console.log(data);
     })
   }
+
+  navigateToTopics(category: Category) {
+  this.categoryService.setCategoryId(category._id);
+  this.router.navigate(['/topics',category.category_name]);
+  
+}
 
 }

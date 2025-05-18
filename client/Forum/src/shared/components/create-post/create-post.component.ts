@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, NgModel } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
-import { mPost } from 'src/shared/models/Post.model';
+import { Post } from 'src/shared/models/Post.model';
 import { User } from 'src/shared/models/User.model';
 import { AuthService } from 'src/shared/services/auth.service';
 import { PostService } from 'src/shared/services/post.service';
@@ -29,23 +29,19 @@ export class CreatePostComponent implements OnInit {
     this.authService.user$.subscribe(user => {
       if (user) {
         this.user = user
-        console.log(user);
-        
       }
     })
 
   }
-
-
-
-  post: Partial<mPost> = {
+  post: Partial<Post> = {
     title: '',
     text: ''
   };
 
   onSubmit() {
-    const newPost: mPost = {
-      post_id: 'p12',
+    console.log(this.user);
+    
+    const newPost: Post = {
       creator_id: this.user._id,
       creator_nickname: this.user.nickname,
       category_id: this.catId!,

@@ -1,5 +1,5 @@
 <div class="category-container">
-  <ion-card *ngFor="let category of categories" [routerLink]="['/topics',category.category_id]">
+  <ion-card button *ngFor="let category of categories" (click)="navigateToTopics(category)">
     <ion-card-title>
           {{category.category_name}}
     </ion-card-title>

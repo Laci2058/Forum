@@ -1,5 +1,5 @@
-export interface mPost {
-  post_id: string;
+export interface Post {
+  _id?: string;
   creator_id: string;
   creator_nickname: string
   category_id: string;
