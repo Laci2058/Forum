@@ -8,9 +8,28 @@ import { Comment } from '../models/comment'
 
 export const configureRoutes = (passport: PassportStatic, router: Router): Router => {
 
+  router.post('/getUserById', (req: Request, res: Response) => {
+    if (!req.isAuthenticated()) {
+      res.status(401).send('Unauthorized');
+    }
+
+    const userId = req.body.userId;
+
+    User.findById(userId)
+      .then(user => {
+        if (!user) {
+          res.status(404).send('User not found');
+        }
+        res.status(200).json(user);
+      })
+      .catch(error => {
+        console.error(error);
+        res.status(500).send('Failed to fetch user.');
+      });
+  });
 
   router.post('/createComment', (req: Request, res: Response) => {
-    if (req.isAuthenticated()) {
+    if (!req.isAuthenticated()) {
       res.status(401).send('Unauthorized');
     }
     const post_id = req.body.post_id;
@@ -36,7 +55,7 @@ export const configureRoutes = (passport: PassportStatic, router: Router): Route
   });
 
   router.post('/createPost', (req: Request, res: Response) => {
-    if (req.isAuthenticated()) {
+    if (!req.isAuthenticated()) {
       res.status(401).send('Unauthorized');
     }
     const creator_id = req.body.creator_id;
@@ -50,7 +69,7 @@ export const configureRoutes = (passport: PassportStatic, router: Router): Route
       creator_nickname: creator_nickname,
       category_id: category_id,
       title: title,
-      tex: text,
+      text: text,
     });
 
     newPost.save()
