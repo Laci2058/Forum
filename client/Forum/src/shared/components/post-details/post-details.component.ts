@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgModule, OnInit } from '@angular/core';
+import { Component, NgModule, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { Comment } from 'src/shared/models/Comment.model';
 import { Post } from 'src/shared/models/Post.model';
 import { ApiService } from 'src/shared/services/api.service';
@@ -19,11 +20,21 @@ import { AuthService } from 'src/shared/services/auth.service';
     FormsModule,
   ]
 })
-export class PostDetailsComponent implements OnInit {
+export class PostDetailsComponent implements OnInit, OnDestroy {
+
+  private authSubscribe!: Subscription;
+  private apiSubscribe!: Subscription;
+  private apiCommentSubscribe!: Subscription;
+
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
     private route: ActivatedRoute) { }
+  ngOnDestroy(): void {
+    this.authSubscribe.unsubscribe()
+    this.apiSubscribe.unsubscribe()
+    this.apiCommentSubscribe.unsubscribe()
+  }
   comments!: Comment[];
   post!: Post;
   isAuthenticated = false;
@@ -32,17 +43,17 @@ export class PostDetailsComponent implements OnInit {
   ngOnInit() {
     const postId = this.route.snapshot.paramMap.get('pid');
     if (postId) {
-      this.apiService.getPostById(postId).subscribe(data => {
+      this.apiSubscribe = this.apiService.getPostById(postId).subscribe(data => {
         if (data) {
           this.post = data;
         }
       });
 
-      this.apiService.getCommentsByPostId(postId).subscribe(data => {
+      this.apiCommentSubscribe = this.apiService.getCommentsByPostId(postId).subscribe(data => {
         this.comments = data;
       });
     }
-    this.authService.isAuthenticated$.subscribe(isAuth => {
+    this.authSubscribe = this.authService.isAuthenticated$.subscribe(isAuth => {
       this.isAuthenticated = isAuth;
     });
   }

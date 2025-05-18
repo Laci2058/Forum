@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { User } from 'src/shared/models/User.model';
 import { AuthService } from 'src/shared/services/auth.service';
 
@@ -11,10 +12,16 @@ import { AuthService } from 'src/shared/services/auth.service';
     IonicModule
   ]
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
+  private authSubscribe!: Subscription;
 
   constructor(private authService: AuthService) { }
+  ngOnDestroy(): void {
+    this.authSubscribe.unsubscribe()
+  }
+
   user!: User
+
   ngOnInit() {
     this.authService.user$.subscribe(data => {
       if (data) {
@@ -22,5 +29,4 @@ export class ProfileComponent implements OnInit {
       }
     })
   }
-
 }

@@ -40,6 +40,9 @@ export class ApiService {
       })
     );
   }
+  deleteUser(userId: string) {
+    return this.http.delete(`http://localhost:5000/app/deleteUser?id=${userId}`, { withCredentials: true });
+  }
 
   /* post */
   createPost(post: Post) {

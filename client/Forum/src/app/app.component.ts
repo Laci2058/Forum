@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { addIcons } from 'ionicons';
 import {
@@ -25,6 +25,7 @@ import {
   personCircleOutline
 } from 'ionicons/icons';
 import { AuthService } from 'src/shared/services/auth.service';
+import { Subscription } from 'rxjs';
 
 
 @Component({
@@ -48,8 +49,10 @@ import { AuthService } from 'src/shared/services/auth.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
 
+  private authSubscribe!: Subscription;
+  private LoginAuthSubscribe!: Subscription;
   constructor(private authService: AuthService, private router: Router) {
     addIcons({
       'home-outline': homeOutline,
@@ -62,15 +65,19 @@ export class AppComponent implements OnInit {
       'person-circle-outline': personCircleOutline
     });
   }
+  ngOnDestroy(): void {
+    this.authSubscribe.unsubscribe()
+    this.LoginAuthSubscribe.unsubscribe()
+  }
   isAuthenticated: boolean = false;
 
   ngOnInit() {
-    this.authService.isAuthenticated$.subscribe(isAuth => {
+    this.authSubscribe = this.authService.isAuthenticated$.subscribe(isAuth => {
       this.isAuthenticated = isAuth;
     });
   }
   logout() {
-    this.authService.logout().subscribe({
+    this.LoginAuthSubscribe = this.authService.logout().subscribe({
       next: (data) => {
         console.log(data);
         this.router.navigateByUrl('/login');

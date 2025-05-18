@@ -16,6 +16,22 @@ export class AuthService {
 
   constructor(private http: HttpClient, private apiService: ApiService) { }
 
+  getCurrentUser(): User | null {
+    return this.userSubject.getValue();
+  }
+
+  getRole(): string | null {
+    return this.getCurrentUser()?.role || null;
+  }
+
+  isAdmin(): boolean {
+    return this.getRole() === 'admin';
+  }
+
+  isUser(): boolean {
+    return this.getRole() === 'user';
+  }
+
   login(email: string, password: string) {
     const body = new URLSearchParams();
     body.set('username', email);
@@ -30,8 +46,7 @@ export class AuthService {
       tap((user_id: any) => {
         this.apiService.getUserById(user_id).subscribe(data => {
           this.userSubject.next(data)
-        }
-        )
+        })
         this.authState.next(true);
       })
     );

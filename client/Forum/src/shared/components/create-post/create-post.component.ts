@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormsModule, NgModel } from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
+import { Subscription } from 'rxjs';
 import { Category } from 'src/shared/models/Category.model';
 import { Post } from 'src/shared/models/Post.model';
 import { User } from 'src/shared/models/User.model';
@@ -19,19 +20,27 @@ import { AuthService } from 'src/shared/services/auth.service';
     FormsModule,
   ]
 })
-export class CreatePostComponent implements OnInit {
+export class CreatePostComponent implements OnInit, OnDestroy {
 
   category!: Category
+  private authSubscribe!: Subscription;
+  private apiSubscribe!: Subscription;
+  private apiSubmitSubscribe!: Subscription;
 
   constructor(private apiService: ApiService, private authService: AuthService, private route: ActivatedRoute) { }
+  ngOnDestroy(): void {
+    this.apiSubscribe.unsubscribe()
+    this.authSubscribe.unsubscribe()
+    this.apiSubmitSubscribe.unsubscribe()
+  }
   user!: User
   ngOnInit() {
-    this.authService.user$.subscribe(user => {
+    this.authSubscribe = this.authService.user$.subscribe(user => {
       if (user) {
         this.user = user
       }
     })
-    this.apiService.selectedCategory$.subscribe(category => {
+     this.apiSubscribe = this.apiService.selectedCategory$.subscribe(category => {
       if (category) {
         this.category = category;
       }
@@ -54,7 +63,7 @@ export class CreatePostComponent implements OnInit {
       text: this.post.text!
     };
 
-    this.apiService.createPost(newPost).subscribe({
+    this.apiSubmitSubscribe = this.apiService.createPost(newPost).subscribe({
       next: (data) => {
         console.log(data)
       }

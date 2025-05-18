@@ -21,6 +21,9 @@
           <ion-text>{{ user.email }}</ion-text>
         </ion-item>
       </ion-list>
+      <ion-button *ngIf="loggedInUser?.role === 'admin'" color="danger" (click)="deleteUser(user._id!)">
+        Delete user (admin)
+      </ion-button>
     </ion-card-content>
   </ion-card>
 </ion-content>
