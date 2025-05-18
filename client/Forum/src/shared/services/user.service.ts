@@ -1,12 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { delay, map, Observable, of } from 'rxjs';
+import { catchError, delay, map, Observable, of } from 'rxjs';
 import { MOCK_USER } from '../mock-data/mock-data';
+import { User } from '../models/User.model';
 
-interface User {
-  name: string;
-  email: string;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -29,4 +26,13 @@ export class UserService {
       map(users => users.find(user => user.user_id === uid))
     );
   }
+  getUserById(userId: string): Observable<User | null> {
+  const body = { userId };
+
+  return this.http.post<User>('http://localhost:5000/app/getUserById', body, { withCredentials: true }).pipe(
+    catchError(err => {
+      return of(null);
+    })
+  );
+}
 }

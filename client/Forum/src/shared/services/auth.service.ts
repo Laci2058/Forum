@@ -2,16 +2,19 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/User.model';
 import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
+import { UserService } from './user.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
+  private userSubject = new BehaviorSubject<User | null>(null);
   private authState = new BehaviorSubject<boolean>(false);
   isAuthenticated$ = this.authState.asObservable();
-  
-  constructor(private http: HttpClient) { }
+  user$ = this.userSubject.asObservable();
+
+  constructor(private http: HttpClient, private userService: UserService) { }
 
   login(email: string, password: string) {
     const body = new URLSearchParams();
@@ -22,18 +25,22 @@ export class AuthService {
       'Content-Type': 'application/x-www-form-urlencoded'
     });
 
-    
+
     return this.http.post('http://localhost:5000/app/login', body, { headers: headers, withCredentials: true }).pipe(
-    tap(() => this.authState.next(true))
-  );
-     
+      tap((user_id: any) => {
+        this.userService.getUserById(user_id).subscribe(data => {
+          this.userSubject.next(data)
+        }
+        )
+        this.authState.next(true);
+      })
+    );
+
   }
 
   register(user: User) {
     const body = new URLSearchParams();
     body.set('email', user.email);
-    body.set('name', user.name);
-    body.set('address', user.address);
     body.set('nickname', user.nickname);
     body.set('password', user.password);
 
@@ -41,13 +48,13 @@ export class AuthService {
       'Content-Type': 'application/x-www-form-urlencoded'
     });
 
-    return this.http.post('http://localhost:5000/app/register', body, {headers: headers});
+    return this.http.post('http://localhost:5000/app/register', body, { headers: headers });
   }
 
   logout() {
-    return this.http.post('http://localhost:5000/app/logout', {}, {withCredentials: true, responseType: 'text'}).pipe(
-    tap(() => this.authState.next(false))
-  );
+    return this.http.post('http://localhost:5000/app/logout', {}, { withCredentials: true, responseType: 'text' }).pipe(
+      tap(() => this.authState.next(false))
+    );
   }
 
   checkAuth(): Observable<boolean> {
@@ -58,5 +65,9 @@ export class AuthService {
         return of(false);
       })
     );
+  }
+
+  getCurrentUser() {
+
   }
 }

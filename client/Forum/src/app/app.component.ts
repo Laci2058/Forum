@@ -64,7 +64,6 @@ export class AppComponent implements OnInit {
     });
   }
   isAuthenticated: boolean = false;
-  private authState = new BehaviorSubject<boolean>(false);
 
   ngOnInit() {
   this.authService.checkAuth().subscribe();

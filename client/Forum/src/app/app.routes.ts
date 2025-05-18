@@ -4,6 +4,11 @@ import { authGuard } from 'src/shared/guards/auth.guard';
 export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   
+  
+  {
+    path: 'topics/:id/submit',
+    loadComponent: () => import('../shared/components/create-post/create-post.component').then((c) => c.CreatePostComponent),
+  },
   {
     path: 'topics/:id/:pid',
     loadComponent: () => import('../shared/components/post-details/post-details.component').then((c) => c.PostDetailsComponent),

@@ -1,7 +1,10 @@
 <div class="topics-container">
+  @if(isAuthenticated){
+  <ion-button [routerLink]="['/topics',categoryId,'submit']">Create new post</ion-button>
+  }
   <ion-card *ngFor="let post of posts" [routerLink]="['/topics',categoryId,post.post_id]">
     <ion-card-title>
-          {{post.title}}
+      {{post.title}}
     </ion-card-title>
   </ion-card>
 </div>
