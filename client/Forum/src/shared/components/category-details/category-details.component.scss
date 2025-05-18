@@ -4,8 +4,18 @@ ion-card{
   text-align: center;
   align-content: center;
 }
+ion-button{
+  height: 40px;
+  width: 15%;
+  text-align: center;
+  align-content: center;
+  --color:#dbdbdb;
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
 .topics-container{
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }

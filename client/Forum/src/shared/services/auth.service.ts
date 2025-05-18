@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { User } from '../models/User.model';
 import { BehaviorSubject, catchError, Observable, of, tap } from 'rxjs';
-import { UserService } from './user.service';
+import { ApiService } from './api.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class AuthService {
   isAuthenticated$ = this.authState.asObservable();
   user$ = this.userSubject.asObservable();
 
-  constructor(private http: HttpClient, private userService: UserService) { }
+  constructor(private http: HttpClient, private apiService: ApiService) { }
 
   login(email: string, password: string) {
     const body = new URLSearchParams();
@@ -28,7 +28,7 @@ export class AuthService {
 
     return this.http.post('http://localhost:5000/app/login', body, { headers: headers, withCredentials: true }).pipe(
       tap((user_id: any) => {
-        this.userService.getUserById(user_id).subscribe(data => {
+        this.apiService.getUserById(user_id).subscribe(data => {
           this.userSubject.next(data)
         }
         )
@@ -65,9 +65,5 @@ export class AuthService {
         return of(false);
       })
     );
-  }
-
-  getCurrentUser() {
-
   }
 }

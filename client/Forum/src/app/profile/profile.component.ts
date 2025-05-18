@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { mUser } from 'src/shared/models/User.model';
-import { UserService } from 'src/shared/services/user.service';
+import { ApiService } from 'src/shared/services/api.service';
 
 @Component({
   selector: 'app-profile',
@@ -9,13 +9,13 @@ import { UserService } from 'src/shared/services/user.service';
 })
 export class ProfileComponent  implements OnInit {
 
-  constructor(private userService: UserService) { }
+  constructor(private apiService: ApiService) { }
   user?: mUser
-  ngOnInit() {
-    this.userService.getMockUser("u1").subscribe(data => {
+  ngOnInit() {/*
+    this.apiService.getMockUser("u1").subscribe(data => {
       this.user = data;
       console.log(data);
-    })
+    })*/
   }
 
 }

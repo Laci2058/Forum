@@ -5,8 +5,8 @@ import { ActivatedRoute } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { Post } from 'src/shared/models/Post.model';
 import { User } from 'src/shared/models/User.model';
+import { ApiService } from 'src/shared/services/api.service';
 import { AuthService } from 'src/shared/services/auth.service';
-import { PostService } from 'src/shared/services/post.service';
 
 @Component({
   selector: 'app-create-post',
@@ -21,7 +21,7 @@ import { PostService } from 'src/shared/services/post.service';
 export class CreatePostComponent implements OnInit {
 
   catId!: string | null;
-  constructor(private postService: PostService, private authService: AuthService, private route: ActivatedRoute) {
+  constructor(private apiService: ApiService, private authService: AuthService, private route: ActivatedRoute) {
     this.catId = this.route.snapshot.paramMap.get('id');
   }
   user!: User
@@ -48,7 +48,7 @@ export class CreatePostComponent implements OnInit {
       title: this.post.title!,
       text: this.post.text!
     };
-    this.postService.createPost(newPost).subscribe({
+    this.apiService.createPost(newPost).subscribe({
       next: (data) => {
         console.log(data)
       }

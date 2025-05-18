@@ -2,12 +2,22 @@
   <ion-card>
     <ion-card-title>{{post.title}}</ion-card-title>
     <ion-card-subtitle>{{post.text}}</ion-card-subtitle>
-    {{post.creator_id}}
   </ion-card>
-  <div  *ngFor="let comment of comments">
+  <div *ngFor="let comment of comments">
     <ion-card>
-      <a [routerLink]="['/profile',comment.creator_id]"> <ion-card-header>{{comment.creator_id}}</ion-card-header></a>
+      <a [routerLink]="['/profile',comment.creator_id]">
+        <ion-card-header>{{comment.creator_nickname}}</ion-card-header></a>
       {{comment.text}}
     </ion-card>
   </div>
+  @if(isAuthenticated){
+  <ion-content class="ion-padding">
+    <form>
+      <ion-input type="text" fill="outline" shape="round" name="title" placeholder="Add a new comment"></ion-input>
+      <ion-button expand="full" type="submit">
+        Comment
+      </ion-button>
+    </form>
+  </ion-content>
+  }
 </div>
