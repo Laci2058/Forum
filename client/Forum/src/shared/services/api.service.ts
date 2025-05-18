@@ -16,6 +16,9 @@ export class ApiService {
 
   constructor(private http: HttpClient) { }
 
+  deleteComment(commentId: string) {
+    return this.http.delete(`http://localhost:5000/app/deleteComment/${commentId}`, { withCredentials: true });
+  }
 
   deletePost(postId: string) {
     return this.http.delete(`http://localhost:5000/app/deletePost/${postId}`, { withCredentials: true });

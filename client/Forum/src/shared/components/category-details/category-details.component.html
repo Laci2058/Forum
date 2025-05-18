@@ -2,19 +2,13 @@
 <ion-content>
   <div class="topics-container">
     @if(isAuthenticated){
-    <ion-button shape="round" strong="true" [routerLink]="['/topic',categoryName,'submit']">Create new
+    <ion-button class="create-button" shape="round" strong="true" [routerLink]="['/topic',categoryName,'submit']">Create
+      new
       post</ion-button>
     }
-    <div *ngFor="let post of posts" class="post-row">
-      <ion-card [routerLink]="['/topic', categoryName, post._id]">
-        <ion-card-title>{{ post.title }}</ion-card-title>
-      </ion-card>
-      @if(loggedInUser.role === 'admin'){
-      <ion-button color="danger" shape="round" (click)="deletePost(post._id!)">
-        Delete
-      </ion-button>
-      }
-    </div>
+    <ion-card *ngFor="let post of posts" class="post-row" [routerLink]="['/topic', categoryName, post._id]">
+      <ion-card-title>{{ post.title }}</ion-card-title>
+    </ion-card>
   </div>
 </ion-content>
 }

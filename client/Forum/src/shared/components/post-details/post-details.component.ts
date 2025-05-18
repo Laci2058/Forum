@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 import { Comment } from 'src/shared/models/Comment.model';
 import { Post } from 'src/shared/models/Post.model';
+import { User } from 'src/shared/models/User.model';
 import { ApiService } from 'src/shared/services/api.service';
 import { AuthService } from 'src/shared/services/auth.service';
 
@@ -22,48 +23,49 @@ import { AuthService } from 'src/shared/services/auth.service';
 })
 export class PostDetailsComponent implements OnInit, OnDestroy {
 
-  private authSubscribe!: Subscription;
-  private apiSubscribe!: Subscription;
-  private apiCommentSubscribe!: Subscription;
-
+  private subscription = new Subscription();
   constructor(
     private apiService: ApiService,
     private authService: AuthService,
     private route: ActivatedRoute) { }
   ngOnDestroy(): void {
-    this.authSubscribe.unsubscribe()
-    this.apiSubscribe.unsubscribe()
-    this.apiCommentSubscribe.unsubscribe()
+    this.subscription.unsubscribe()
   }
   comments!: Comment[];
   post!: Post;
   isAuthenticated = false;
   newCommentText = '';
+  loggedInUser!: User;
 
   ngOnInit() {
     const postId = this.route.snapshot.paramMap.get('pid');
     if (postId) {
-      this.apiSubscribe = this.apiService.getPostById(postId).subscribe(data => {
+      this.subscription.add(this.apiService.getPostById(postId).subscribe(data => {
         if (data) {
           this.post = data;
         }
-      });
+      }));
 
-      this.apiCommentSubscribe = this.apiService.getCommentsByPostId(postId).subscribe(data => {
+      this.subscription.add(this.apiService.getCommentsByPostId(postId).subscribe(data => {
         this.comments = data;
-      });
+      }));
     }
-    this.authSubscribe = this.authService.isAuthenticated$.subscribe(isAuth => {
+    this.subscription.add(this.authService.isAuthenticated$.subscribe(isAuth => {
       this.isAuthenticated = isAuth;
-    });
+    }));
+
+    this.subscription.add(
+      this.authService.user$.subscribe(data => {
+        if (data) {
+          this.loggedInUser = data
+        }
+      })
+    )
   }
-
-
-
   submitComment() {
     if (!this.newCommentText.trim() || !this.post || !this.authService.user$) return;
 
-    this.authService.user$.subscribe(user => {
+    this.subscription.add(this.authService.user$.subscribe(user => {
       if (!user) return;
       const newComment: Comment = {
         creator_id: user._id!,
@@ -75,6 +77,32 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
         this.comments.push(comment);
         this.newCommentText = '';
       });
-    });
+    }));
+  }
+
+  deletePost(postId: string) {
+    if (confirm('Biztosan törlöd ezt a posztot?')) {
+      this.subscription.add(this.apiService.deletePost(postId).subscribe({
+        next: () => { },
+        error: (err) => {
+          console.error('Hiba törlés közben:', err);
+        }
+      }));
+    }
+  }
+
+  deleteComment(commentId: string) {
+    if (confirm('Biztosan törlöd ezt a posztot?')) {
+      this.subscription.add(this.apiService.deleteComment(commentId).subscribe({
+        next: () => {
+          console.log('Comment deleted successfully');
+          this.comments = this.comments.filter(c => c._id !== commentId);
+        },
+        error: (err) => {
+          console.error('Failed to delete comment:', err);
+          alert('Failed to delete comment');
+        }
+      }));
+    }
   }
 }

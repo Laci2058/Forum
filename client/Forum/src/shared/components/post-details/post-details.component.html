@@ -1,20 +1,28 @@
 @if(post && comments){
 <ion-content fullscreen>
-  <ion-card class="post">
-    <ion-item lines="none" class="post-header" detail="false">
-      <ion-avatar slot="start">
-        <img [src]="'https://www.gravatar.com/avatar?d=mp'" />
-      </ion-avatar>
-      <ion-label>
-        <a [routerLink]="['/profiles', post.creator_id]" class="comment-author">
-          <h3>{{ post.creator_nickname }}</h3>
-        </a>
-      </ion-label>
-    </ion-item>
+  <div>
+    <ion-card class="post">
+      <ion-item lines="none" class="post-header" detail="false">
+        <ion-avatar slot="start">
+          <img [src]="'https://www.gravatar.com/avatar?d=mp'" />
+        </ion-avatar>
+        <ion-label>
+          <a [routerLink]="['/profiles', post.creator_id]" class="comment-author">
+            <h3>{{ post.creator_nickname }}</h3>
+          </a>
+        </ion-label>
+      </ion-item>
 
-    <ion-card-title>{{ post.title }}</ion-card-title>
-    <ion-card-subtitle>{{ post.text }}</ion-card-subtitle>
-  </ion-card>
+      <ion-card-title>{{ post.title }}</ion-card-title>
+      <ion-card-subtitle>{{ post.text }}</ion-card-subtitle>
+    </ion-card>
+    @if(loggedInUser.role === 'admin'){
+    <ion-button color="danger" shape="round" (click)="deletePost(post._id!)">
+      Delete
+    </ion-button>
+    }
+  </div>
+
 
   <div class="comment-section" *ngIf="isAuthenticated">
     <form (ngSubmit)="submitComment()" class="comment-form">
@@ -42,6 +50,11 @@
         </p>
       </div>
     </ion-item>
+    @if(loggedInUser.role === 'admin'){
+    <ion-button color="danger" shape="round" (click)="deleteComment(comment._id!)">
+      Delete
+    </ion-button>
+    }
   </div>
 </ion-content>
 }

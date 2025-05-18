@@ -57,28 +57,5 @@ export class CategoryDetailsComponent implements OnInit, OnDestroy {
       this.isAuthenticated = isAuth;
     })
     )
-    this.subscription.add(
-      this.authService.user$.subscribe(data => {
-        if (data) {
-          this.loggedInUser = data
-        }
-      })
-    )
-  }
-
-  deletePost(postId: string) {
-
-    if (confirm('Biztosan törlöd ezt a posztot?')) {
-      this.apiService.deletePost(postId).subscribe({
-        next: () => {
-          this.posts = this.posts.filter(p => p._id !== postId);
-          console.log("asdasd");
-          
-        },
-        error: (err) => {
-          console.error('Hiba törlés közben:', err);
-        }
-      });
-    }
   }
 }

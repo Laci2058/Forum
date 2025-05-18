@@ -1,31 +1,21 @@
-.topics-container {
+ion-card{
+  height: 60px;
+  width: 60%;
+  text-align: center;
+  align-content: center;
+}
+ion-button{
+  height: 40px;
+  width: 15%;
+  text-align: center;
+  align-content: center;
+  --color:#dbdbdb;
+  margin-top: 15px;
+  margin-bottom: 30px;
+}
+.topics-container{
   display: flex;
+  flex-wrap: wrap;
   flex-direction: column;
   align-items: center;
-  flex-wrap: nowrap; /* nem szükséges, de legyen rendezett */
-  width: 100%;
-}
-
-.post-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 60%; /* vagy tetszőleges szélesség */
-  margin-bottom: 20px; /* kis távolság a sorok között */
-  gap: 15px; /* kis hely a card és gomb között */
-}
-
-ion-card {
-  flex: 1; /* foglalja el a rendelkezésre álló helyet */
-  height: 60px;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-ion-button {
-  width: 80px; /* fix vagy kisebb szélesség a gombnak */
-  height: 40px;
-  --color: #dbdbdb;
 }

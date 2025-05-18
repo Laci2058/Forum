@@ -10,7 +10,28 @@ import { isAdmin } from '../middleware/roles';
 
 export const configureRoutes = (passport: PassportStatic, router: Router): Router => {
 
-  router.delete('/deletePost/:id', (req: Request, res: Response) => {
+  router.delete('/deleteComment/:id', isAdmin, (req, res) => {
+    if (!req.isAuthenticated()) {
+      res.status(401).send('Unauthorized');
+    }
+
+    const commentId = req.params.id;
+
+    Comment.findByIdAndDelete(commentId)
+      .then(deletedComment => {
+        if (!deletedComment) {
+          res.status(404).send('Comment not found.');
+        }
+        res.status(200).json({ message: 'Comment deleted successfully.', comment: deletedComment });
+      })
+      .catch(error => {
+        console.error('Error deleting comment:', error);
+        res.status(500).send('Failed to delete comment.');
+      });
+  });
+
+
+  router.delete('/deletePost/:id', isAdmin, (req, res) => {
     if (!req.isAuthenticated()) {
       res.status(401).send('Unauthorized');
     }
@@ -260,7 +281,7 @@ export const configureRoutes = (passport: PassportStatic, router: Router): Route
     }
   });
 
-  router.delete('/deleteUser', (req: Request, res: Response) => {
+  router.delete('/deleteUser', isAdmin, (req, res) => {
     if (req.isAuthenticated()) {
       const id = req.query.id;
       const query = User.deleteOne({ _id: id });
