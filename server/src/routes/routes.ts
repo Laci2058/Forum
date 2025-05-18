@@ -1,10 +1,67 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { User } from '../models/user';
 import { PassportStatic } from 'passport';
+import { Post } from '../models/post';
+import { Comment } from '../models/comment'
 
-export const router = Router();
+
 
 export const configureRoutes = (passport: PassportStatic, router: Router): Router => {
+
+
+  router.post('/createComment', (req: Request, res: Response) => {
+    if (req.isAuthenticated()) {
+      res.status(401).send('Unauthorized');
+    }
+    const post_id = req.body.post_id;
+    const creator_id = req.body.creator_id;
+    const creator_nickname = req.body.creator_nickname;
+    const text = req.body.text;
+
+    const comment = new Comment({
+      post_id: post_id,
+      creator_id: creator_id,
+      creator_nickname: creator_nickname,
+      text: text
+    });
+
+    comment.save()
+      .then(savedComment => {
+        res.status(201).json(savedComment);
+      })
+      .catch(error => {
+        console.error(error);
+        res.status(500).send('Failed to create comment.');
+      });
+  });
+
+  router.post('/createPost', (req: Request, res: Response) => {
+    if (req.isAuthenticated()) {
+      res.status(401).send('Unauthorized');
+    }
+    const creator_id = req.body.creator_id;
+    const creator_nickname = req.body.creator_nickname;
+    const category_id = req.body.category_id;
+    const title = req.body.title;
+    const text = req.body.text;
+
+    const newPost = new Post({
+      creator_id: creator_id,
+      creator_nickname: creator_nickname,
+      category_id: category_id,
+      title: title,
+      tex: text,
+    });
+
+    newPost.save()
+      .then(savedPost => {
+        res.status(201).json(savedPost);
+      })
+      .catch(error => {
+        console.error(error);
+        res.status(500).send('Failed to create post.');
+      });
+  });
 
   router.post('/login', (req: Request, res: Response, next: NextFunction) => {
     passport.authenticate('local', (error: string | null, user: typeof User) => {
@@ -41,6 +98,7 @@ export const configureRoutes = (passport: PassportStatic, router: Router): Route
       res.status(500).send(error);
     })
   });
+
   router.post('/logout', (req: Request, res: Response) => {
     if (req.isAuthenticated()) {
       req.logout((error) => {

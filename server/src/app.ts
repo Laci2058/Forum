@@ -1,5 +1,5 @@
 import express from 'express';
-import expressSession  from 'express-session';
+import expressSession from 'express-session';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import { config } from './config';
@@ -25,7 +25,7 @@ mongoose.connect(mongoUri)
   })
   .catch(err => console.error('DB connection error:', err));
 
-const whitelist = ['http://localhost:4200','http://localhost:8100']
+const whitelist = ['*', 'http://localhost:4200', 'http://localhost:8100']
 const corsOptions = {
   origin: (origin: string | undefined, callback: (err: Error | null, allowedOrigin?: string) => void) => {
     if (origin && whitelist.includes(origin)) {
@@ -40,16 +40,16 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // bodyParser
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // cookieParser
 app.use(cookieParser());
 
 // session
 const sessionOptions: expressSession.SessionOptions = {
-    secret: 'testsecret',
-    resave: false,
-    saveUninitialized: false
+  secret: 'testsecret',
+  resave: false,
+  saveUninitialized: false
 };
 app.use(expressSession(sessionOptions));
 
@@ -59,9 +59,5 @@ app.use(passport.session());
 configurePassport(passport);
 
 app.use('/app', configureRoutes(passport, express.Router()));
-
-app.listen(PORT, () => {
-    console.log('Server is listening on port ' + PORT.toString());
-});
 
 console.log('After server is ready.');
