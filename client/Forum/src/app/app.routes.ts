@@ -30,7 +30,7 @@ export const routes: Routes = [
     loadComponent: () => import('./login/login.component').then((c) => c.LoginComponent)
   },
   {
-    path: 'profile/:id',
+    path: 'profiles/:id',
     loadComponent: () => import('../shared/components/profile-details/profile-details.component').then((c) => c.ProfileDetailsComponent)
   },
   {

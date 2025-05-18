@@ -6,7 +6,9 @@
         <img [src]="'https://www.gravatar.com/avatar?d=mp'" />
       </ion-avatar>
       <ion-label>
-        <h3>{{ post.creator_nickname }}</h3>
+        <a [routerLink]="['/profiles', post.creator_id]" class="comment-author">
+          <h3>{{ post.creator_nickname }}</h3>
+        </a>
       </ion-label>
     </ion-item>
 
@@ -32,7 +34,7 @@
         <img [src]="'https://www.gravatar.com/avatar?d=mp'" />
       </ion-avatar>
       <div class="comment-texts">
-        <a [routerLink]="['/profile', comment.creator_id]" class="comment-author">
+        <a [routerLink]="['/profiles', comment.creator_id]" class="comment-author">
           {{ comment.creator_nickname }}
         </a>
         <p class="comment-text">
