@@ -25,7 +25,6 @@ import {
   personCircleOutline
 } from 'ionicons/icons';
 import { AuthService } from 'src/shared/services/auth.service';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
 
 @Component({
@@ -66,12 +65,12 @@ export class AppComponent implements OnInit {
   isAuthenticated: boolean = false;
 
   ngOnInit() {
-  this.authService.checkAuth().subscribe();
+    this.authService.checkAuth().subscribe();
 
-  this.authService.isAuthenticated$.subscribe(isAuth => {
-    this.isAuthenticated = isAuth;
-  });
-}
+    this.authService.isAuthenticated$.subscribe(isAuth => {
+      this.isAuthenticated = isAuth;
+    });
+  }
   logout() {
     this.authService.logout().subscribe({
       next: (data) => {

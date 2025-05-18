@@ -40,7 +40,6 @@ export class PostDetailsComponent implements OnInit {
 
       this.apiService.getCommentsByPostId(postId).subscribe(data => {
         this.comments = data;
-        console.log('Comments:', data);
       });
     }
     this.authService.isAuthenticated$.subscribe(isAuth => {
@@ -48,7 +47,7 @@ export class PostDetailsComponent implements OnInit {
     });
   }
 
-  
+
 
   submitComment() {
     if (!this.newCommentText.trim() || !this.post || !this.authService.user$) return;

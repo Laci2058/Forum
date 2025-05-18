@@ -1,25 +1,45 @@
-@if(post)
-{
-<ion-card>
-  <ion-card-title>{{post.title}}</ion-card-title>
-  <ion-card-subtitle>{{post.text}}</ion-card-subtitle>
-</ion-card>
-<div *ngFor="let comment of comments">
-  <ion-card>
-    <a [routerLink]="['/profile',comment.creator_id]">
-      <ion-card-header>{{comment.creator_nickname}}</ion-card-header></a>
-    {{comment.text}}
+@if(post){
+<ion-content fullscreen>
+  <ion-card class="post">
+    <ion-item lines="none" class="post-header" detail="false">
+      <ion-avatar slot="start">
+        <img [src]="'https://www.gravatar.com/avatar?d=mp'" />
+      </ion-avatar>
+      <ion-label>
+        <h3>{{ post.creator_nickname }}</h3>
+      </ion-label>
+    </ion-item>
+
+    <ion-card-title>{{ post.title }}</ion-card-title>
+    <ion-card-subtitle>{{ post.text }}</ion-card-subtitle>
   </ion-card>
-</div>
-@if(isAuthenticated){
-<ion-content class="ion-padding" *ngIf="isAuthenticated">
-  <form (ngSubmit)="submitComment()">
-    <ion-input type="text" [(ngModel)]="newCommentText" name="comment" fill="outline" shape="round"
-      placeholder="Add a new comment" required></ion-input>
-    <ion-button expand="full" type="submit">
-      Comment
-    </ion-button>
-  </form>
+
+  <div class="comment-section" *ngIf="isAuthenticated">
+    <form (ngSubmit)="submitComment()" class="comment-form">
+      <ion-item lines="none" class="input-with-button">
+        <ion-textarea [(ngModel)]="newCommentText" name="comment" placeholder="Add a new comment" autoGrow="true"
+          rows="1" maxlength="500"></ion-textarea>
+        <ion-button slot="end" type="submit" color="primary" shape="round" size="small">
+          Comment
+        </ion-button>
+      </ion-item>
+    </form>
+  </div>
+
+  <div *ngFor="let comment of comments" class="comment-container">
+    <ion-item lines="none" class="comment-item">
+      <ion-avatar slot="start">
+        <img [src]="'https://www.gravatar.com/avatar?d=mp'" />
+      </ion-avatar>
+      <div class="comment-texts">
+        <a [routerLink]="['/profile', comment.creator_id]" class="comment-author">
+          {{ comment.creator_nickname }}
+        </a>
+        <p class="comment-text">
+          {{ comment.text }}
+        </p>
+      </div>
+    </ion-item>
+  </div>
 </ion-content>
-}
 }

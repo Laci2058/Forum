@@ -1,11 +1,105 @@
-ion-card{
-  min-height: 15vh;
+.post, .comment-card {
+  width: 70%;
+  margin: 16px auto; /* középre igazítás */
+  background-color: #1e1e1e;
+  color: #f0f0f0;
 }
-ion-card-title{
+
+ion-card-title {
   font-size: xx-large;
-  text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
 }
-ion-card-subtitle{
+
+ion-card-subtitle {
   font-size: large;
+}
+
+.comment-section {
+  padding: 0 16px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.comment-form {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.input-with-button {
+  --background: #2a2a2a;
+  --border-radius: 30px;
+  --padding-start: 16px;
+  --padding-end: 0;
+  background-color: #2a2a2a;
+  border-radius: 30px;
+}
+
+.input-with-button ion-input {
+  --color: #fff;
+  font-size: 1rem;
+}
+
+.input-with-button ion-textarea {
+  --color: #fff;
+  font-size: 1rem;
+  --padding-start: 0;
+  --padding-top: 8px;
+  --padding-bottom: 8px;
+  --padding-end: 0;
+  min-height: 40px;
+}
+.comment-container {
+  width: 70%;
+  margin: 0 auto 12px auto;
+  background-color: #2a2a2a;
+  border-radius: 8px;
+  padding: 12px;
+  color: #f0f0f0;
+}
+
+.comment-item {
+  --background: transparent;
+  --padding-start: 0;
+  --padding-end: 0;
+  align-items: flex-start; 
+}
+
+.comment-texts {
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
+  flex: 1;
+}
+
+.comment-author {
+  font-weight: bold;
+  color: var(--ion-color-primary);
+  text-decoration: none;
+  margin-bottom: 6px;
+}
+
+.comment-text {
+  margin: 0;
+  white-space: pre-wrap; 
+  font-size: 1rem;
+}
+.post-header {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  align-items: center;
+}
+
+.post-header ion-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.post-header h3 {
+  margin: 0;
+  font-weight: bold;
+  color: #f0f0f0;
 }

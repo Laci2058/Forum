@@ -7,12 +7,12 @@
 <ion-content class="ion-padding">
   <form (ngSubmit)="onSubmit()" #postForm="ngForm">
     <ion-item>
-      <ion-label position="floating">Cím</ion-label>
+      <ion-label position="floating">Title</ion-label>
       <ion-input type="text" [(ngModel)]="post.title" name="title" required></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label position="floating">Szöveg</ion-label>
+      <ion-label position="floating">Text</ion-label>
       <ion-textarea [(ngModel)]="post.text" name="text" required></ion-textarea>
     </ion-item>
 
